@@ -2,77 +2,56 @@
     var currentPath = Context.Request.Path.Value?.ToLowerInvariant() ?? "/";
 }
 
-<header class="w-full">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-6">
-        <a href="/" class="text-sm font-medium text-muted-foreground hover:text-foreground">
-            Login/Logout
-        </a>
+<header class="header">
+    <div class="container">
 
-        <a href="/" class="flex flex-col items-center">
-            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-secondary text-primary shadow-sm md:h-24 md:w-24">
-                <span class="font-serif text-xs font-semibold tracking-wide text-center leading-tight">
-                    FRIENDS OF<br />VALKENBERG<br />TRUST
-                </span>
+        <!-- Logo -->
+        <a href="/" class="logo">
+            <div class="logo-circle">
+                FOVT
             </div>
         </a>
 
-        <div class="flex items-center gap-3">
-            <a href="#" aria-label="Facebook" class="text-primary hover:opacity-80">
-                <span class="social-icon">f</span>
-            </a>
+        <!-- Navigation -->
+        <nav class="nav">
+            <ul class="nav-links">
 
-            <a href="#" aria-label="Instagram" class="text-primary hover:opacity-80">
-                <span class="social-icon">◎</span>
-            </a>
+                <li><a href="/">Home</a></li>
 
-            <a href="#" aria-label="YouTube" class="text-primary hover:opacity-80">
-                <span class="social-icon">▶</span>
-            </a>
+                <li class="dropdown">
+                    <a href="#">About</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Home/About">About Us</a></li>
+                        <li><a href="/Home/Services">Services</a></li>
+                        <li><a href="/Home/Reports">Reports</a></li>
+                        <li><a href="/Home/Contact">Contact</a></li>
+                    </ul>
+                </li>
 
-            <button id="mobile-menu-toggle"
-                    class="ml-2 rounded-md p-2 text-foreground md:hidden"
-                    aria-label="Toggle menu"
-                    type="button">
-                <span id="mobile-menu-icon">☰</span>
-            </button>
+                <li class="dropdown">
+                    <a href="#">Get Involved</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Home/Events">Events</a></li>
+                        <li><a href="/Home/Volunteer">Volunteer</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#">Community</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Home/Resources">Resources</a></li>
+                        <li><a href="/Home/Gallery">Gallery</a></li>
+                    </ul>
+                </li>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- Right Side -->
+        <div class="nav-actions">
+            <a href="/Home/Donate" class="btn-donate">Donate</a>
         </div>
+
     </div>
-
-    <nav class="navbar">
-        <div class="nav-logo">FOVT</div>
-
-        <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-
-            <li class="dropdown">
-                <a href="#">About</a>
-                <ul class="dropdown-menu">
-                    <li><a href="/Home/About">About Us</a></li>
-                    <li><a href="/Home/Services">Services</a></li>
-                    <li><a href="/Home/Reports">Reports</a></li>
-                    <li><a href="/Home/Contact">Contact</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a href="#">Get Involved</a>
-                <ul class="dropdown-menu">
-                    <li><a href="/Home/Events">Events</a></li>
-                    <li><a href="/Home/Volunteer">Volunteer</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a href="#">Community</a>
-                <ul class="dropdown-menu">
-                    <li><a href="/Home/Resources">Resources</a></li>
-                    <li><a href="/Home/Gallery">Gallery</a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="/Home/Donate" class="btn-donate">Donate</a>
-            </li>
-        </ul>
-    </nav>
 </header>
