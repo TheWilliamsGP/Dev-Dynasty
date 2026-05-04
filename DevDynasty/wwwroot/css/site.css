@@ -44,6 +44,41 @@
     --ring: #7aa6c7;
 }
 
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #382a1a;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+    }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background: #2775a5;
+    padding: 10px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.btn-donate {
+    background-color: #af7634;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
 * {
     box-sizing: border-box;
     border-color: var(--border);

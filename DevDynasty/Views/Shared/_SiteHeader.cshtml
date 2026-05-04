@@ -38,56 +38,40 @@
         </div>
     </div>
 
-    <nav class="bg-secondary">
-        <ul class="mx-auto hidden max-w-7xl flex-wrap items-center justify-center gap-1 px-4 py-3 md:flex">
-            <li>
-                <a href="/" class="nav-link @(currentPath == "/" ? "nav-link-active" : "")">Home</a>
-            </li>
-            <li>
-                <a href="/about" class="nav-link @(currentPath == "/about" ? "nav-link-active" : "")">About</a>
-            </li>
-            <li>
-                <a href="/services" class="nav-link @(currentPath == "/services" ? "nav-link-active" : "")">Services</a>
-            </li>
-            <li>
-                <a href="/donations" class="nav-link @(currentPath == "/donations" ? "nav-link-active" : "")">Donations</a>
-            </li>
-            <li>
-                <a href="/events" class="nav-link @(currentPath == "/events" ? "nav-link-active" : "")">Events</a>
-            </li>
-            <li>
-                <a href="/volunteer" class="nav-link @(currentPath == "/volunteer" ? "nav-link-active" : "")">Volunteer</a>
-            </li>
-            <li>
-                <a href="/resources" class="nav-link @(currentPath == "/resources" ? "nav-link-active" : "")">Resources</a>
-            </li>
-            <li>
-                <a href="/community" class="nav-link @(currentPath == "/community" ? "nav-link-active" : "")">Community</a>
-            </li>
-            <li>
-                <a href="/contact" class="nav-link @(currentPath == "/contact" ? "nav-link-active" : "")">Contact Us</a>
-            </li>
-            <li>
-                <a href="/donate" class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
-                    Donate Here
-                </a>
-            </li>
-        </ul>
+    <nav class="navbar">
+        <div class="nav-logo">FOVT</div>
 
-        <ul id="mobile-menu" class="mx-auto hidden max-w-7xl flex-col gap-1 px-4 py-3 md:hidden">
-            <li><a href="/" class="mobile-nav-link">Home</a></li>
-            <li><a href="/about" class="mobile-nav-link">About</a></li>
-            <li><a href="/services" class="mobile-nav-link">Services</a></li>
-            <li><a href="/donations" class="mobile-nav-link">Donations</a></li>
-            <li><a href="/events" class="mobile-nav-link">Events</a></li>
-            <li><a href="/volunteer" class="mobile-nav-link">Volunteer</a></li>
-            <li><a href="/resources" class="mobile-nav-link">Resources</a></li>
-            <li><a href="/community" class="mobile-nav-link">Community</a></li>
-            <li><a href="/contact" class="mobile-nav-link">Contact Us</a></li>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+
+            <li class="dropdown">
+                <a href="#">About</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Home/About">About Us</a></li>
+                    <li><a href="/Home/Services">Services</a></li>
+                    <li><a href="/Home/Reports">Reports</a></li>
+                    <li><a href="/Home/Contact">Contact</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">Get Involved</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Home/Events">Events</a></li>
+                    <li><a href="/Home/Volunteer">Volunteer</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">Community</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Home/Resources">Resources</a></li>
+                    <li><a href="/Home/Gallery">Gallery</a></li>
+                </ul>
+            </li>
+
             <li>
-                <a href="/donate" class="block rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground">
-                    Donate Here
-                </a>
+                <a href="/Home/Donate" class="btn-donate">Donate</a>
             </li>
         </ul>
     </nav>
