@@ -44,6 +44,16 @@
     --ring: #7aa6c7;
 }
 
+.gallery {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+}
+
+    .gallery img {
+        height: 250px;
+    }
+
 .navbar {
     display: flex;
     justify-content: space-between;

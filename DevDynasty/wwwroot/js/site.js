@@ -7,6 +7,12 @@
         return;
     }
 
+    const gallery = document.getElementById("gallery");
+
+    setInterval(() => {
+        gallery.scrollLeft += 300;
+    }, 3000);
+
     toggleButton.addEventListener("click", function () {
         const isOpen = !menu.classList.contains("hidden");
 
