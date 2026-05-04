@@ -821,6 +821,55 @@ button {
         margin-right: auto;
     }
 
+/* ---------- PALE SKY USAGE SYSTEM ---------- */
+
+/* Light sections */
+.section-light {
+    background: var(--pale-sky);
+    color: var(--foreground);
+}
+
+/* Cards (VERY IMPORTANT) */
+.card {
+    background: var(--pale-sky);
+    color: var(--foreground);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* Alternate section flow */
+.section-alt {
+    background: white;
+}
+
+/* Subtle separators */
+.section-divider {
+    height: 2px;
+    background: var(--pale-sky);
+    margin: 40px auto;
+    width: 60%;
+}
+
+/* ---------- CONTENT WIDTH SYSTEM ---------- */
+
+.content-container {
+    width: 60%;
+    margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+    .content-container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-container {
+        width: 90%;
+    }
+}
+
 /* ---------- FOOTER POLISH ---------- */
 .footer {
     background: var(--dark-coffee);
