@@ -2,6 +2,14 @@
    ?? GLOBAL UI POLISH (ADD BELOW EXISTING CSS)
 ========================================= */
 
+:root {
+    --white: #ffffff;
+    --pale-sky: #c0def0;
+    --rich-cerulean: #2775a5;
+    --copper: #af7634;
+    --dark-coffee: #382a1a;
+}
+
 /* ---------- HEADER (Unified Clean Design) ---------- */
 .header {
     background: var(--dark-coffee);
