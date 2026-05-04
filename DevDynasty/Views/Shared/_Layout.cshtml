@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="author" content="Friends of Valkenberg Trust" />
+
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="flex min-h-screen flex-col">
+        <partial name="_SiteHeader" />
+
+        <main class="flex-1">
+            @RenderBody()
+        </main>
+
+        <partial name="_SiteFooter" />
+    </div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

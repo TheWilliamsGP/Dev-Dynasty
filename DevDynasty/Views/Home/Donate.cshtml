@@ -1,0 +1,26 @@
+@{
+    ViewData["HeroTitle"] = "Donate Here";
+    ViewData["HeroSubtitle"] = "Help us continue our vital work.";
+}
+
+<partial name="_PageHero" />
+
+<section class="mx-auto max-w-2xl px-4 py-16">
+    <div class="grid grid-cols-3 gap-3">
+        <button type="button" class="rounded-md border-2 border-primary px-6 py-4 text-lg font-semibold text-primary hover:bg-accent">
+            R100
+        </button>
+
+        <button type="button" class="rounded-md border-2 border-primary px-6 py-4 text-lg font-semibold text-primary hover:bg-accent">
+            R250
+        </button>
+
+        <button type="button" class="rounded-md border-2 border-primary px-6 py-4 text-lg font-semibold text-primary hover:bg-accent">
+            R500
+        </button>
+    </div>
+
+    <button type="button" class="mt-6 w-full rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
+        Continue to Donate
+    </button>
+</section>

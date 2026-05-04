@@ -1,0 +1,20 @@
+@{
+    ViewData["HeroTitle"] = "Contact Us";
+    ViewData["HeroSubtitle"] = "We'd love to hear from you.";
+}
+
+<partial name="_PageHero" />
+
+<section class="mx-auto max-w-2xl px-4 py-16">
+    <form class="space-y-4" method="post" action="#">
+        <input class="w-full rounded-md border bg-background px-4 py-3" placeholder="Your Name" name="Name" />
+
+        <input class="w-full rounded-md border bg-background px-4 py-3" placeholder="Email Address" type="email" name="Email" />
+
+        <textarea class="w-full rounded-md border bg-background px-4 py-3" rows="5" placeholder="Your Message" name="Message"></textarea>
+
+        <button type="button" class="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
+            Send Message
+        </button>
+    </form>
+</section>

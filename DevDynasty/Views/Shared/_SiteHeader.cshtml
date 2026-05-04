@@ -1,0 +1,94 @@
+﻿@{
+    var currentPath = Context.Request.Path.Value?.ToLowerInvariant() ?? "/";
+}
+
+<header class="w-full">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-6">
+        <a href="/" class="text-sm font-medium text-muted-foreground hover:text-foreground">
+            Login/Logout
+        </a>
+
+        <a href="/" class="flex flex-col items-center">
+            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-secondary text-primary shadow-sm md:h-24 md:w-24">
+                <span class="font-serif text-xs font-semibold tracking-wide text-center leading-tight">
+                    FRIENDS OF<br />VALKENBERG<br />TRUST
+                </span>
+            </div>
+        </a>
+
+        <div class="flex items-center gap-3">
+            <a href="#" aria-label="Facebook" class="text-primary hover:opacity-80">
+                <span class="social-icon">f</span>
+            </a>
+
+            <a href="#" aria-label="Instagram" class="text-primary hover:opacity-80">
+                <span class="social-icon">◎</span>
+            </a>
+
+            <a href="#" aria-label="YouTube" class="text-primary hover:opacity-80">
+                <span class="social-icon">▶</span>
+            </a>
+
+            <button id="mobile-menu-toggle"
+                    class="ml-2 rounded-md p-2 text-foreground md:hidden"
+                    aria-label="Toggle menu"
+                    type="button">
+                <span id="mobile-menu-icon">☰</span>
+            </button>
+        </div>
+    </div>
+
+    <nav class="bg-secondary">
+        <ul class="mx-auto hidden max-w-7xl flex-wrap items-center justify-center gap-1 px-4 py-3 md:flex">
+            <li>
+                <a href="/" class="nav-link @(currentPath == "/" ? "nav-link-active" : "")">Home</a>
+            </li>
+            <li>
+                <a href="/about" class="nav-link @(currentPath == "/about" ? "nav-link-active" : "")">About</a>
+            </li>
+            <li>
+                <a href="/services" class="nav-link @(currentPath == "/services" ? "nav-link-active" : "")">Services</a>
+            </li>
+            <li>
+                <a href="/donations" class="nav-link @(currentPath == "/donations" ? "nav-link-active" : "")">Donations</a>
+            </li>
+            <li>
+                <a href="/events" class="nav-link @(currentPath == "/events" ? "nav-link-active" : "")">Events</a>
+            </li>
+            <li>
+                <a href="/volunteer" class="nav-link @(currentPath == "/volunteer" ? "nav-link-active" : "")">Volunteer</a>
+            </li>
+            <li>
+                <a href="/resources" class="nav-link @(currentPath == "/resources" ? "nav-link-active" : "")">Resources</a>
+            </li>
+            <li>
+                <a href="/community" class="nav-link @(currentPath == "/community" ? "nav-link-active" : "")">Community</a>
+            </li>
+            <li>
+                <a href="/contact" class="nav-link @(currentPath == "/contact" ? "nav-link-active" : "")">Contact Us</a>
+            </li>
+            <li>
+                <a href="/donate" class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
+                    Donate Here
+                </a>
+            </li>
+        </ul>
+
+        <ul id="mobile-menu" class="mx-auto hidden max-w-7xl flex-col gap-1 px-4 py-3 md:hidden">
+            <li><a href="/" class="mobile-nav-link">Home</a></li>
+            <li><a href="/about" class="mobile-nav-link">About</a></li>
+            <li><a href="/services" class="mobile-nav-link">Services</a></li>
+            <li><a href="/donations" class="mobile-nav-link">Donations</a></li>
+            <li><a href="/events" class="mobile-nav-link">Events</a></li>
+            <li><a href="/volunteer" class="mobile-nav-link">Volunteer</a></li>
+            <li><a href="/resources" class="mobile-nav-link">Resources</a></li>
+            <li><a href="/community" class="mobile-nav-link">Community</a></li>
+            <li><a href="/contact" class="mobile-nav-link">Contact Us</a></li>
+            <li>
+                <a href="/donate" class="block rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground">
+                    Donate Here
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
