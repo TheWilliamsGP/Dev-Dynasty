@@ -1,4 +1,9 @@
 :root {
+    --white: #ffffff;
+    --pale-sky: #c0def0;
+    --rich-cerulean: #2775a5;
+    --copper: #af7634;
+    --dark-coffee: #382a1a;
     --radius: 0.5rem;
     --background: #fafdff;
     --foreground: #27313f;
@@ -42,6 +47,14 @@
     --border: rgba(255, 255, 255, 0.12);
     --input: rgba(255, 255, 255, 0.16);
     --ring: #7aa6c7;
+}
+
+.footer {
+    background: #382a1a;
+    color: white;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 .gallery {
