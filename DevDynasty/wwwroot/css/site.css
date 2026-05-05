@@ -1,4 +1,9 @@
 :root {
+    --white: #ffffff;
+    --pale-sky: #c0def0;
+    --rich-cerulean: #2775a5;
+    --copper: #af7634;
+    --dark-coffee: #382a1a;
     --radius: 0.5rem;
     --background: #fafdff;
     --foreground: #27313f;
@@ -44,6 +49,59 @@
     --ring: #7aa6c7;
 }
 
+.footer {
+    background: #382a1a;
+    color: white;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.gallery {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+}
+
+    .gallery img {
+        height: 250px;
+    }
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #382a1a;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+    }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background: #2775a5;
+    padding: 10px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.btn-donate {
+    background-color: #af7634;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
 * {
     box-sizing: border-box;
     border-color: var(--border);
@@ -61,10 +119,7 @@ body {
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-h1,
-h2,
-h3,
-h4 {
+h1, h2, h3, h4 {
     font-family: var(--font-serif);
 }
 
@@ -73,12 +128,9 @@ a {
     text-decoration: none;
 }
 
-button,
-input,
-textarea {
+button, input, textarea {
     font: inherit;
 }
-
 /* Tailwind-like utility classes used by the converted views */
 
 .flex {
@@ -590,8 +642,7 @@ textarea {
     resize: vertical;
 }
 
-input,
-textarea {
+input, textarea {
     border: 1px solid var(--input);
     color: var(--foreground);
 }
@@ -639,5 +690,258 @@ button {
     .md\:text-6xl {
         font-size: 3.75rem;
         line-height: 1;
+    }
+}
+:root {
+    --white: #ffffff;
+    --pale-sky: #c0def0;
+    --rich-cerulean: #2775a5;
+    --copper: #af7634;
+    --dark-coffee: #382a1a;
+}
+
+/* ---------- HEADER (Unified Clean Design) ---------- */
+.header {
+    background: var(--dark-coffee);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ---------- LOGO ---------- */
+.logo-circle {
+    background: var(--rich-cerulean);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* ---------- NAVIGATION ---------- */
+.nav-links {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.2s ease;
+    }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+/* ---------- DROPDOWN FIX ---------- */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--rich-cerulean);
+    padding: 10px;
+    border-radius: 6px;
+    min-width: 180px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+    .dropdown-menu li {
+        list-style: none;
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 6px 10px;
+        color: white;
+    }
+
+        .dropdown-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* ---------- CTA BUTTON ---------- */
+.btn-donate {
+    background-color: var(--copper);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+    .btn-donate:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+    }
+
+/* ---------- HERO SECTION ---------- */
+.hero {
+    background: linear-gradient( rgba(56, 42, 26, 0.9), rgba(39, 117, 165, 0.8) );
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    .hero p {
+        margin-top: 1rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+/* ---------- PALE SKY USAGE SYSTEM ---------- */
+
+/* Light sections */
+.section-light {
+    background: var(--pale-sky);
+    color: var(--foreground);
+}
+
+/* Cards (VERY IMPORTANT) */
+.card {
+    background: var(--pale-sky);
+    color: var(--foreground);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* Alternate section flow */
+.section-alt {
+    background: white;
+}
+
+/* Subtle separators */
+.section-divider {
+    height: 2px;
+    background: var(--pale-sky);
+    margin: 40px auto;
+    width: 60%;
+}
+
+/* ---------- CONTENT WIDTH SYSTEM ---------- */
+
+.content-container {
+    width: 60%;
+    margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+    .content-container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-container {
+        width: 90%;
+    }
+}
+
+/* ---------- FOOTER POLISH ---------- */
+.footer {
+    background: var(--dark-coffee);
+    color: white;
+    padding: 40px 20px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.footer a {
+    display: block;
+    color: white;
+    margin-top: 5px;
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+    .footer a:hover {
+        opacity: 0.7;
+    }
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    opacity: 0.6;
+    font-size: 0.9rem;
+}
+
+/* ---------- GALLERY IMPROVEMENT ---------- */
+.gallery {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 10px;
+}
+
+    .gallery img {
+        height: 250px;
+        border-radius: 10px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+/* ---------- GENERAL SPACING IMPROVEMENT ---------- */
+section {
+    padding: 60px 20px;
+}
+
+/* ---------- MOBILE RESPONSIVENESS ---------- */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* hide desktop nav */
+    }
+
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .container {
+        flex-direction: column;
+        gap: 10px;
     }
 }
