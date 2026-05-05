@@ -68,7 +68,8 @@
                 <a href="/contact" class="nav-link @(currentPath == "/contact" ? "nav-link-active" : "")">Contact Us</a>
             </li>
             <li>
-                <a href="/donate" class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
+                <a asp-controller="DonationUser" asp-action="Index"
+                   class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
                     Donate Here
                 </a>
             </li>
@@ -85,7 +86,8 @@
             <li><a href="/community" class="mobile-nav-link">Community</a></li>
             <li><a href="/contact" class="mobile-nav-link">Contact Us</a></li>
             <li>
-                <a href="/donate" class="block rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground">
+                <a asp-controller="DonationUser" asp-action="Index"
+                   class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
                     Donate Here
                 </a>
             </li>

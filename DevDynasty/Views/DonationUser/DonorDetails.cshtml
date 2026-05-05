@@ -1,0 +1,23 @@
+﻿@model DevDynasty.Models.UserDonorViewModel
+
+<h2>Donor Details</h2>
+
+<form asp-action="DonorDetails" method="post">
+
+    <div>
+        <input asp-for="DonorName" placeholder="Full Name" required />
+        <span asp-validation-for="DonorName"></span>
+    </div>
+
+    <div>
+        <input asp-for="DonorEmail" placeholder="Email" type="email" required />
+        <span asp-validation-for="DonorEmail"></span>
+    </div>
+
+    <div>
+        <input asp-for="Field" placeholder="Country" required />
+        <span asp-validation-for="Field"></span>
+    </div>
+
+    <button type="submit">Donate</button>
+</form>
