@@ -1,0 +1,110 @@
+﻿@model DevDynasty.Models.UserPaymentViewModel
+
+<div class="min-h-screen bg-gray-100 flex justify-center items-center">
+    <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-xl">
+
+        <h2 class="text-2xl font-bold text-center mb-6">Complete Your Donation</h2>
+
+        <form asp-action="Payment" method="post">
+
+            <!-- PAYMENT METHOD -->
+            <div class="mb-6">
+                <label class="block font-semibold mb-2">Payment Method</label>
+
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-2">
+                        <input type="radio" asp-for="PaymentType" value="Card" checked />
+                        Card
+                    </label>
+
+                    <label class="flex items-center gap-2">
+                        <input type="radio" asp-for="PaymentType" value="EFT" />
+                        EFT
+                    </label>
+                </div>
+            </div>
+
+            <!-- CARD SECTION -->
+            <div id="cardSection">
+
+                <!-- Card Type -->
+                <div class="mb-3">
+                    <label class="block font-semibold mb-1">Card Type</label>
+                    <select asp-for="CardType" class="w-full border rounded p-2">
+                        <option value="Credit">Credit Card</option>
+                        <option value="Debit">Debit Card</option>
+                    </select>
+                </div>
+
+                <!-- Card Number -->
+                <input asp-for="CardNumber"
+                       placeholder="Card Number"
+                       class="w-full border rounded p-2 mb-3" />
+
+                <!-- Expiry -->
+                <input asp-for="Expiry"
+                       placeholder="MM/YY"
+                       class="w-full border rounded p-2 mb-3" />
+
+                <!-- Save Card -->
+                <label class="flex items-center mt-3">
+                    <input asp-for="SaveCard" type="checkbox" class="mr-2" />
+                    Save card for future donations
+                </label>
+
+            </div>
+
+            <!-- EFT SECTION -->
+            <div id="eftSection" style="display:none;" class="mt-6 p-4 border rounded bg-gray-50">
+
+                <h4 class="font-semibold mb-2">Bank Details</h4>
+
+                <p><strong>Bank:</strong> Standard Bank</p>
+                <p><strong>Account Number:</strong> 071270728</p>
+                <p><strong>Branch Code:</strong> 051001</p>
+                <p><strong>Reference:</strong> Your Name & Surname</p>
+
+                <p class="text-sm text-gray-600 mt-2">
+                    Please complete the EFT using your banking app. Your donation will be marked as pending until received.
+                </p>
+
+            </div>
+
+            <!-- SUBMIT -->
+            <button type="submit"
+                    class="w-full mt-6 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                Complete Donation
+            </button>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const radios = document.querySelectorAll('input[name="PaymentType"]');
+        const cardSection = document.getElementById("cardSection");
+        const eftSection = document.getElementById("eftSection");
+
+        function toggle() {
+            const selectedRadio = document.querySelector('input[name="PaymentType"]:checked');
+
+            if (!selectedRadio) return;
+
+            const selected = selectedRadio.value;
+
+            if (selected === "EFT") {
+                cardSection.style.display = "none";
+                eftSection.style.display = "block";
+            } else {
+                cardSection.style.display = "block";
+                eftSection.style.display = "none";
+            }
+        }
+
+        radios.forEach(r => r.addEventListener("change", toggle));
+
+        toggle(); 
+    });
+</script>

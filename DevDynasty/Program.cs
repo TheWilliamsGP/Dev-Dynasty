@@ -1,6 +1,20 @@
+using DevDynasty.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<SupabaseService>((serviceProvider, client) =>
+{
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+
+    var baseUrl = config["Supabase:Url"];
+    var apiKey = config["Supabase:ApiKey"];
+
+    client.BaseAddress = new Uri(baseUrl);
+    client.DefaultRequestHeaders.Add("apikey", apiKey);
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+});
 
 var app = builder.Build();
 
