@@ -804,10 +804,13 @@ button {
 
 /* ---------- HERO SECTION ---------- */
 .hero {
-    background: linear-gradient( rgba(56, 42, 26, 0.9), rgba(39, 117, 165, 0.8) );
+    background: var(--rich-cerulean);
     color: white;
-    padding: 100px 20px;
+    padding: 120px 20px 100px;
     text-align: center;
+    border-bottom: 4px solid var(--pale-sky);
+    /* subtle depth */
+    box-shadow: inset 0 -10px 30px rgba(0,0,0,0.1);
 }
 
     .hero h1 {
@@ -856,6 +859,19 @@ button {
 .content-container {
     width: 60%;
     margin: 0 auto;
+}
+
+    /* Improve paragraph readability in centered layouts */
+    .content-container p {
+        line-height: 1.7;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+/* Section heading spacing */
+section h2 {
+    margin-bottom: 10px;
 }
 
 @media (max-width: 1024px) {
