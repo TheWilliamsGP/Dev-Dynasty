@@ -32,4 +32,8 @@
     <None Include="wwwroot\reports\annual-report-final-2018.pdf" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
+  </ItemGroup>
+
 </Project>
