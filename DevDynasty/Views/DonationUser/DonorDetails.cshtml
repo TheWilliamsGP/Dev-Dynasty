@@ -1,23 +1,36 @@
 ﻿@model DevDynasty.Models.UserDonorViewModel
 
-<h2>Donor Details</h2>
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
 
-<form asp-action="DonorDetails" method="post">
+        <h2 class="text-2xl font-bold text-center mb-6">Your Details</h2>
 
-    <div>
-        <input asp-for="DonorName" placeholder="Full Name" required />
-        <span asp-validation-for="DonorName"></span>
+        <form asp-action="DonorDetails" method="post" class="space-y-4">
+
+            <input asp-for="DonorName"
+                   class="w-full border rounded-md px-3 py-2"
+                   placeholder="Full Name"
+                   required />
+            <span asp-validation-for="DonorName" class="text-red-500 text-sm"></span>
+
+            <input asp-for="DonorEmail"
+                   type="email"
+                   class="w-full border rounded-md px-3 py-2"
+                   placeholder="Email Address"
+                   required />
+            <span asp-validation-for="DonorEmail" class="text-red-500 text-sm"></span>
+
+            <input asp-for="Field"
+                   class="w-full border rounded-md px-3 py-2"
+                   placeholder="Country"
+                   required />
+            <span asp-validation-for="Field" class="text-red-500 text-sm"></span>
+
+            <button type="submit"
+                    class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
+                Continue to Payment
+            </button>
+
+        </form>
     </div>
-
-    <div>
-        <input asp-for="DonorEmail" placeholder="Email" type="email" required />
-        <span asp-validation-for="DonorEmail"></span>
-    </div>
-
-    <div>
-        <input asp-for="Field" placeholder="Country" required />
-        <span asp-validation-for="Field"></span>
-    </div>
-
-    <button type="submit">Donate</button>
-</form>
+</div>

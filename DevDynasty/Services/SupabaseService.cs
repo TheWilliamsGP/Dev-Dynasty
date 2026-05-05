@@ -14,7 +14,7 @@ namespace DevDynasty.Services
         }
 
         //Creates Donor
-        public async Task<DonorDto> CreateDonor(DonorDto donor)
+        public async Task<DonorDto> CreateDonor(object donor)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "donartable")
             {
@@ -54,6 +54,41 @@ namespace DevDynasty.Services
             {
                 throw new Exception($"SUPABASE DONATION ERROR: {error}");
             }
+        }
+
+        //Payment
+        public async Task CreateCard(CardDto card)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "cardtable")
+            {
+                Content = JsonContent.Create(card)
+            };
+
+            request.Headers.Add("Prefer", "return=representation");
+
+            var response = await _http.SendAsync(request);
+
+            var error = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"SUPABASE CARD ERROR: {error}");
+            }
+        }
+
+        
+        public async Task<List<DonationDto>> GetDonations()
+        {
+            var response = await _http.GetAsync("donationtable?select=*");
+
+            var error = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"SUPABASE GET ERROR: {error}");
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<DonationDto>>();
         }
     }
 }

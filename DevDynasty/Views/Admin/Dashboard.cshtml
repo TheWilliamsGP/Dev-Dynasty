@@ -1,0 +1,58 @@
+﻿@model AdminDashboardViewModel
+
+<div class="p-6">
+
+    <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+
+    <!-- STATS -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-white p-4 rounded shadow">
+            <h4>Total Donations</h4>
+            <p class="text-2xl font-bold">R @Model.TotalAmount</p>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+            <h4>Number of Donations</h4>
+            <p class="text-2xl font-bold">@Model.TotalDonations</p>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+            <h4>Card Payments</h4>
+            <p class="text-2xl font-bold">@Model.TotalCardPayments</p>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+            <h4>EFT Payments</h4>
+            <p class="text-2xl font-bold">@Model.TotalEftPayments</p>
+        </div>
+
+    </div>
+
+    <!-- RECENT DONATIONS -->
+    <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-xl mb-4">Recent Donations</h3>
+
+        <table class="w-full border">
+            <thead>
+                <tr class="border-b">
+                    <th class="text-left p-2">Amount</th>
+                    <th class="text-left p-2">Type</th>
+                    <th class="text-left p-2">Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var d in Model.RecentDonations)
+                {
+                    <tr class="border-b">
+                        <td class="p-2">R @d.donationamount</td>
+                        <td class="p-2">@d.donationcontent</td>
+                        <td class="p-2">@d.donationdate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
