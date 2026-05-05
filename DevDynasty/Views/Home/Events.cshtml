@@ -1,59 +1,68 @@
 @{
-    ViewData["Title"] = "Events";
+    ViewData["HeroTitle"] = "Events & Community Involvement";
+    ViewData["HeroSubtitle"] = "Join us in making a difference through meaningful community engagement.";
 }
 
-<section class="hero">
-    <h1>Events & Community Involvement</h1>
-    <p>Join us in making a difference through meaningful community engagement.</p>
-</section>
+<partial name="_PageHero" />
 
+<!-- INTRO -->
 <section class="section-light">
-    <div class="content-container">
-
+    <div class="content-container text-center">
         <h2>Our Events</h2>
-        <p>
-            Friends of Valkenberg Trust hosts a variety of events aimed at supporting mental health
-            initiatives, raising awareness, and bringing the community together. These events play a
-            vital role in improving the lives of patients and strengthening support networks.
+
+        <p class="mt-4">
+            Our events bring together the community to support mental health initiatives,
+            raise awareness, and create meaningful connections.
         </p>
-
-        <div class="section-divider"></div>
-
-        <div class="card">
-            <h3>Fundraising Initiatives</h3>
-            <p>
-                Our fundraising events are designed to generate critical resources that directly support
-                patient care and hospital programs. From charity drives to sponsored events, each initiative
-                contributes to meaningful change.
-            </p>
-        </div>
-
-        <div class="card mt-6">
-            <h3>Community Outreach</h3>
-            <p>
-                We actively engage with the wider community through outreach programs that promote mental
-                health awareness, reduce stigma, and encourage public participation in support initiatives.
-            </p>
-        </div>
-
-        <div class="card mt-6">
-            <h3>Volunteer-Led Events</h3>
-            <p>
-                Our volunteers play a key role in organizing and running events. Their dedication helps
-                create welcoming, impactful experiences for both patients and the community.
-            </p>
-        </div>
-
     </div>
 </section>
 
+<!-- FUNDRAISING -->
+<section class="section-alt">
+    <div class="content-container text-center">
+        <h2>Fundraising Initiatives</h2>
+
+        <p class="mt-4">
+            Through fundraising events, we generate essential resources that directly
+            support patient care and hospital programmes.
+        </p>
+    </div>
+</section>
+
+<!-- OUTREACH -->
 <section class="section-light">
     <div class="content-container text-center">
+        <h2>Community Outreach</h2>
 
+        <p class="mt-4">
+            Our outreach programmes engage the public, promote awareness,
+            and help reduce stigma surrounding mental health.
+        </p>
+    </div>
+</section>
+
+<!-- VOLUNTEERS -->
+<section class="section-alt">
+    <div class="content-container text-center">
+        <h2>Volunteer-Led Events</h2>
+
+        <p class="mt-4">
+            Volunteers play a vital role in organising and running our events,
+            helping create meaningful and welcoming experiences.
+        </p>
+    </div>
+</section>
+
+<!-- IMPACT -->
+<section class="section-light">
+    <div class="content-container text-center">
         <h2>Our Impact</h2>
 
-        <div class="flex justify-between mt-6">
+        <p class="mt-4">
+            Our work continues to grow through community involvement and support.
+        </p>
 
+        <div class="flex justify-between mt-6">
             <div>
                 <h3 class="text-3xl">300+</h3>
                 <p>Patients Supported</p>
@@ -68,22 +77,20 @@
                 <h3 class="text-3xl">20+</h3>
                 <p>Events Hosted</p>
             </div>
-
         </div>
-
     </div>
 </section>
 
+<!-- CTA -->
 <section class="section-alt">
     <div class="content-container text-center">
-
         <h2>Get Involved</h2>
-        <p>
-            Whether attending an event or volunteering your time, your contribution helps us continue
-            our mission of supporting mental health care.
+
+        <p class="mt-4">
+            Whether attending an event or volunteering, your contribution helps
+            us continue supporting mental health care.
         </p>
 
-        <a href="/Home/Volunteer" class="btn-donate mt-4">Become a Volunteer</a>
-
+        <a href="/Home/Volunteer" class="btn-donate mt-6">Become a Volunteer</a>
     </div>
 </section>
