@@ -1,0 +1,30 @@
+﻿@model DevDynasty.Models.AdminEvents.AdminEventFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+<section class="mx-auto max-w-4xl px-4 py-16">
+    <a href="/admin/events" class="text-sm text-primary hover:opacity-80">← Back to events</a>
+
+    <h1 class="mt-4 font-serif text-4xl font-bold">Edit Event</h1>
+    <p class="mt-2 text-muted-foreground">Update event information, date, location, and required volunteers.</p>
+
+    <form asp-action="Edit" asp-route-id="@Model.EventId" method="post" class="mt-8 rounded-xl border bg-card p-6 shadow-sm">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="EventId" />
+
+        <partial name="_EventForm" model="Model" />
+
+        <div class="mt-8 flex gap-3">
+            <button type="submit" class="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
+                Save Changes
+            </button>
+
+            <a href="/admin/events/details/@Model.EventId" class="rounded-md border border-input px-6 py-3 text-sm font-semibold">
+                Cancel
+            </a>
+        </div>
+    </form>
+</section>

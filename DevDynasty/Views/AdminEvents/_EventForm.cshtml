@@ -1,0 +1,66 @@
+﻿@model DevDynasty.Models.AdminEvents.AdminEventFormViewModel
+
+<div class="space-y-4">
+    <div>
+        <label asp-for="EventName" class="form-label"></label>
+        <input asp-for="EventName" class="form-input" />
+        <span asp-validation-for="EventName" class="form-error"></span>
+    </div>
+
+    <div>
+        <label asp-for="EventType" class="form-label"></label>
+        <input asp-for="EventType" class="form-input" placeholder="Fundraiser, workshop, awareness day..." />
+        <span asp-validation-for="EventType" class="form-error"></span>
+    </div>
+
+    <div>
+        <label asp-for="EventDescription" class="form-label"></label>
+        <textarea asp-for="EventDescription" class="form-input" rows="5"></textarea>
+        <span asp-validation-for="EventDescription" class="form-error"></span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+        <div>
+            <label asp-for="EventStartDate" class="form-label"></label>
+            <input asp-for="EventStartDate" type="date" class="form-input" />
+            <span asp-validation-for="EventStartDate" class="form-error"></span>
+        </div>
+
+        <div>
+            <label asp-for="EventEndDate" class="form-label"></label>
+            <input asp-for="EventEndDate" type="date" class="form-input" />
+            <span asp-validation-for="EventEndDate" class="form-error"></span>
+        </div>
+    </div>
+
+    <div>
+        <label asp-for="LocationId" class="form-label"></label>
+        <select asp-for="LocationId" class="form-input">
+            <option value="">No location selected</option>
+            @foreach (var location in Model.Locations)
+            {
+                <option value="@location.LocationId">@location.DisplayName</option>
+            }
+        </select>
+        <span asp-validation-for="LocationId" class="form-error"></span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+        <div>
+            <label asp-for="RequiredVolunteers" class="form-label"></label>
+            <input asp-for="RequiredVolunteers" type="number" min="1" class="form-input" />
+            <span asp-validation-for="RequiredVolunteers" class="form-error"></span>
+        </div>
+
+        <div>
+            <label asp-for="EventStatus" class="form-label"></label>
+            <select asp-for="EventStatus" class="form-input">
+                <option value="active">Active</option>
+                <option value="draft">Draft</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="completed">Completed</option>
+            </select>
+            <span asp-validation-for="EventStatus" class="form-error"></span>
+        </div>
+    </div>
+</div>

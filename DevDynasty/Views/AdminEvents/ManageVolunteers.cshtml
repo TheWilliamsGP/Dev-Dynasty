@@ -1,0 +1,87 @@
+﻿@model DevDynasty.Models.AdminEvents.ManageEventVolunteersViewModel
+
+@{
+    ViewData["Title"] = "Manage Event Volunteers";
+}
+
+<section class="mx-auto max-w-6xl px-4 py-16">
+    <a href="/admin/events/details/@Model.Event.EventId" class="text-sm text-primary hover:opacity-80">← Back to event</a>
+
+    <h1 class="mt-4 font-serif text-4xl font-bold">Manage Volunteers</h1>
+
+    <p class="mt-2 text-muted-foreground">
+        @Model.Event.EventName — @Model.Event.JoinedVolunteers / @Model.Event.RequiredVolunteers volunteers joined.
+    </p>
+
+    <div class="mt-8 grid gap-8 md:grid-cols-2">
+        <div class="rounded-xl border bg-card p-6 shadow-sm">
+            <h2 class="font-serif text-2xl font-bold">Assigned Volunteers</h2>
+
+            @if (!Model.AssignedVolunteers.Any())
+            {
+                <p class="mt-4 text-muted-foreground">No volunteers are assigned yet.</p>
+            }
+            else
+            {
+                <div class="mt-4 grid gap-3">
+                    @foreach (var volunteer in Model.AssignedVolunteers)
+                    {
+                        <div class="rounded-md border p-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <div>
+                                    <p class="font-semibold">@volunteer.FullName</p>
+                                    <p class="text-sm text-muted-foreground">@volunteer.VolunteerEmail</p>
+                                </div>
+
+                                <form asp-action="UnassignVolunteer" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                    <input type="hidden" name="volunteerId" value="@volunteer.VolunteerId" />
+
+                                    <button type="submit" class="rounded-md border border-input px-3 py-2 text-sm font-semibold text-destructive">
+                                        Unassign
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="rounded-xl border bg-card p-6 shadow-sm">
+            <h2 class="font-serif text-2xl font-bold">Available Volunteers</h2>
+
+            @if (!Model.AvailableVolunteers.Any())
+            {
+                <p class="mt-4 text-muted-foreground">All volunteers are already assigned to this event.</p>
+            }
+            else
+            {
+                <div class="mt-4 grid gap-3">
+                    @foreach (var volunteer in Model.AvailableVolunteers)
+                    {
+                        <div class="rounded-md border p-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <div>
+                                    <p class="font-semibold">@volunteer.FullName</p>
+                                    <p class="text-sm text-muted-foreground">@volunteer.VolunteerEmail</p>
+                                </div>
+
+                                <form asp-action="AssignVolunteer" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                    <input type="hidden" name="volunteerId" value="@volunteer.VolunteerId" />
+
+                                    <button type="submit" class="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground">
+                                        Assign
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>

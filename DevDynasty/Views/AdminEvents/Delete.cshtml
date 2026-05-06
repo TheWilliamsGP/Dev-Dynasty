@@ -1,0 +1,35 @@
+﻿@model DevDynasty.Models.AdminEvents.EventListItemViewModel
+
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<section class="mx-auto max-w-3xl px-4 py-16">
+    <a href="/admin/events" class="text-sm text-primary hover:opacity-80">← Back to events</a>
+
+    <div class="mt-6 rounded-xl border bg-card p-6 shadow-sm">
+        <h1 class="font-serif text-4xl font-bold text-destructive">Delete Event</h1>
+
+        <p class="mt-4 text-muted-foreground">
+            Are you sure you want to delete this event? This will also remove its volunteer assignments.
+        </p>
+
+        <div class="mt-6 rounded-md bg-muted p-4">
+            <p><strong>Event:</strong> @Model.EventName</p>
+            <p><strong>Date:</strong> @Model.EventStartDate</p>
+            <p><strong>Volunteers:</strong> @Model.JoinedVolunteers / @Model.RequiredVolunteers</p>
+        </div>
+
+        <form asp-action="DeleteConfirmed" asp-route-id="@Model.EventId" method="post" class="mt-8 flex gap-3">
+            @Html.AntiForgeryToken()
+
+            <button type="submit" class="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
+                Yes, Delete
+            </button>
+
+            <a href="/admin/events/details/@Model.EventId" class="rounded-md border border-input px-6 py-3 text-sm font-semibold">
+                Cancel
+            </a>
+        </form>
+    </div>
+</section>

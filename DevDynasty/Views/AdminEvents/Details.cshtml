@@ -1,0 +1,70 @@
+﻿@model DevDynasty.Models.AdminEvents.EventDetailsViewModel
+
+@{
+    ViewData["Title"] = "View Event";
+}
+
+<section class="mx-auto max-w-5xl px-4 py-16">
+    <a href="/admin/events" class="text-sm text-primary hover:opacity-80">← Back to events</a>
+
+    <div class="mt-6 rounded-xl border bg-card p-6 shadow-sm">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <h1 class="font-serif text-4xl font-bold">@Model.Event.EventName</h1>
+                <p class="mt-2 text-muted-foreground">@Model.Event.EventDescription</p>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+                <a href="/admin/events/edit/@Model.Event.EventId" class="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+                    Edit
+                </a>
+
+                <a href="/admin/events/manage-volunteers/@Model.Event.EventId" class="rounded-md border border-input px-4 py-2 text-sm font-semibold">
+                    Manage Volunteers
+                </a>
+
+                <a href="/admin/events/delete/@Model.Event.EventId" class="rounded-md border border-input px-4 py-2 text-sm font-semibold text-destructive">
+                    Delete
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-2">
+            <div>
+                <h2 class="font-serif text-xl font-semibold">Event Details</h2>
+                <p class="mt-2"><strong>Type:</strong> @Model.Event.EventType</p>
+                <p class="mt-2"><strong>Start date:</strong> @Model.Event.EventStartDate</p>
+                <p class="mt-2"><strong>End date:</strong> @Model.Event.EventEndDate</p>
+                <p class="mt-2"><strong>Location:</strong> @Model.Event.LocationAddress</p>
+                <p class="mt-2"><strong>Status:</strong> @Model.Event.EventStatus</p>
+            </div>
+
+            <div>
+                <h2 class="font-serif text-xl font-semibold">Volunteer Status</h2>
+                <p class="mt-2"><strong>Joined:</strong> @Model.Event.JoinedVolunteers / @Model.Event.RequiredVolunteers</p>
+                <p class="mt-2"><strong>Staffing:</strong> @Model.Event.StaffingStatus</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 rounded-xl border bg-card p-6 shadow-sm">
+        <h2 class="font-serif text-2xl font-bold">Assigned Volunteers</h2>
+
+        @if (!Model.AssignedVolunteers.Any())
+        {
+            <p class="mt-4 text-muted-foreground">No volunteers have been assigned to this event yet.</p>
+        }
+        else
+        {
+            <div class="mt-4 grid gap-3">
+                @foreach (var volunteer in Model.AssignedVolunteers)
+                {
+                    <div class="rounded-md border p-4">
+                        <p class="font-semibold">@volunteer.FullName</p>
+                        <p class="text-sm text-muted-foreground">@volunteer.VolunteerEmail</p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

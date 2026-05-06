@@ -958,3 +958,107 @@ section {
         gap: 10px;
     }
 }
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+    .admin-table th,
+    .admin-table td {
+        border-bottom: 1px solid var(--border);
+        padding: 1rem;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .admin-table th {
+        background-color: var(--muted);
+        color: var(--foreground);
+        font-weight: 700;
+    }
+
+.admin-action-link {
+    display: inline-block;
+    border-radius: 0.375rem;
+    border: 1px solid var(--input);
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+    .admin-action-link:hover {
+        background-color: var(--accent);
+    }
+
+.admin-danger-link {
+    display: inline-block;
+    border-radius: 0.375rem;
+    border: 1px solid var(--input);
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--destructive);
+}
+
+    .admin-danger-link:hover {
+        background-color: color-mix(in srgb, var(--destructive) 10%, transparent);
+    }
+
+.form-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.form-input {
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid var(--input);
+    background-color: var(--background);
+    color: var(--foreground);
+    padding: 0.75rem 1rem;
+}
+
+.form-error {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--destructive);
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.dashboard-menu-card {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background-color: var(--background);
+    padding: 1.5rem;
+    transition: background-color 150ms ease, transform 150ms ease;
+}
+
+    .dashboard-menu-card:hover {
+        background-color: var(--accent);
+        transform: translateY(-1px);
+    }
+
+.dashboard-menu-title {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.dashboard-menu-text {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}

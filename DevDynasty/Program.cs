@@ -1,6 +1,11 @@
+using DevDynasty.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<SupabaseAdminEventsService>();
+builder.Services.AddHttpClient<SupabaseVolunteerDashboardService>();
 
 var app = builder.Build();
 

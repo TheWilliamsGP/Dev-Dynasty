@@ -1,0 +1,71 @@
+﻿@model List<DevDynasty.Models.AdminEvents.EventListItemViewModel>
+
+@{
+    ViewData["Title"] = "Admin Events";
+}
+
+<section class="mx-auto max-w-7xl px-4 py-16">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="font-serif text-4xl font-bold">Admin Events</h1>
+            <p class="mt-2 text-muted-foreground">Create, edit, delete, and manage volunteer staffing for events.</p>
+        </div>
+
+        <a href="/admin/events/create" class="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
+            Create Event
+        </a>
+    </div>
+
+    <div class="mt-8 overflow-auto rounded-xl border bg-card shadow-sm">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Volunteers</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7">No events have been created yet.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.EventName</td>
+                            <td>@item.EventType</td>
+                            <td>
+                                @item.EventStartDate
+                                @if (!string.IsNullOrWhiteSpace(item.EventEndDate))
+                                {
+                                    <span> - @item.EventEndDate</span>
+                                }
+                            </td>
+                            <td>@item.LocationAddress</td>
+                            <td>@item.JoinedVolunteers / @item.RequiredVolunteers</td>
+                            <td>@item.StaffingStatus</td>
+                            <td>
+                                <div class="flex flex-wrap gap-1">
+                                    <a class="admin-action-link" href="/admin/events/details/@item.EventId">View</a>
+                                    <a class="admin-action-link" href="/admin/events/edit/@item.EventId">Edit</a>
+                                    <a class="admin-action-link" href="/admin/events/manage-volunteers/@item.EventId">Volunteers</a>
+                                    <a class="admin-danger-link" href="/admin/events/delete/@item.EventId">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
