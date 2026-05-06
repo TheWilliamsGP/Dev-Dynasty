@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\AnnualReports\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\reports\annual-report-2013.pdf" />
     <None Include="wwwroot\reports\annual-report-2014.pdf" />
     <None Include="wwwroot\reports\annual-report-2015.pdf" />
