@@ -18,6 +18,13 @@ namespace DevDynasty.Web.Controllers
             return View();
         }
 
+        public IActionResult Reports()
+        {
+            ViewData["Title"] = "Annual Reports – Friends of Valkenberg Trust";
+            ViewData["Description"] = "View and download our annual reports.";
+            return View();
+        }
+
         public IActionResult Community()
         {
             ViewData["Title"] = "Community — Friends of Valkenberg Trust";
