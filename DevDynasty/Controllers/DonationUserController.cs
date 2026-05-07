@@ -23,6 +23,35 @@ namespace DevDynasty.Controllers
         [HttpPost]
         public IActionResult Index(UserDonationViewModel model)
         {
+            // Money donation validation
+            if (model.IsMonetary)
+            {
+                if (!model.DonationAmount.HasValue || model.DonationAmount <= 0)
+                {
+                    ModelState.AddModelError(
+                        "DonationAmount",
+                        "Please enter a valid donation amount."
+                    );
+                }
+            }
+
+            // Goods donation validation
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.DonationContent))
+                {
+                    ModelState.AddModelError(
+                        "DonationContent",
+                        "Please describe the donated goods."
+                    );
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             TempData["Donation"] = JsonSerializer.Serialize(model);
 
             return RedirectToAction("DonorDetails");
@@ -50,6 +79,10 @@ namespace DevDynasty.Controllers
         [HttpPost]
         public async Task<IActionResult> DonorDetails(UserDonorViewModel donorModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(donorModel);
+            }
             var donationData = JsonSerializer.Deserialize<UserDonationViewModel>(
                 TempData["Donation"]?.ToString()
             );
@@ -110,6 +143,31 @@ namespace DevDynasty.Controllers
         [HttpPost]
         public async Task<IActionResult> Payment(UserPaymentViewModel model)
         {
+            // Card validation only if Card payment selected
+            if (model.PaymentType == "Card")
+            {
+                if (string.IsNullOrWhiteSpace(model.CardNumber))
+                {
+                    ModelState.AddModelError(
+                        "CardNumber",
+                        "Card number is required."
+                    );
+                }
+
+                if (string.IsNullOrWhiteSpace(model.Expiry))
+                {
+                    ModelState.AddModelError(
+                        "Expiry",
+                        "Expiry date is required."
+                    );
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var donationData = JsonSerializer.Deserialize<UserDonationViewModel>(
                 TempData["Donation"]?.ToString()
             );

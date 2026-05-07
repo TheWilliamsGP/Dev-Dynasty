@@ -20,6 +20,10 @@
 
             <form asp-action="Payment" method="post" class="space-y-6">
 
+                <div asp-validation-summary="All"
+                     class="text-red-500 text-sm">
+                </div>
+
                 <!-- PAYMENT METHOD -->
                 <div>
 
@@ -169,32 +173,59 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        const radios = document.querySelectorAll('input[name="PaymentType"]');
-        const cardSection = document.getElementById("cardSection");
-        const eftSection = document.getElementById("eftSection");
+        const radios =
+            document.querySelectorAll('input[name="PaymentType"]');
+
+        const cardSection =
+            document.getElementById("cardSection");
+
+        const eftSection =
+            document.getElementById("eftSection");
+
+        // ALL card inputs
+        const cardInputs =
+            cardSection.querySelectorAll("input, select");
 
         function toggle() {
 
             const selectedRadio =
-                document.querySelector('input[name="PaymentType"]:checked');
+                document.querySelector(
+                    'input[name="PaymentType"]:checked'
+                );
 
             if (!selectedRadio) return;
 
             const selected = selectedRadio.value;
 
+            // EFT SELECTED
             if (selected === "EFT") {
 
                 cardSection.style.display = "none";
                 eftSection.style.display = "block";
 
-            } else {
+                // Disable card inputs
+                cardInputs.forEach(input => {
+                    input.disabled = true;
+                });
+
+            }
+
+            // CARD SELECTED
+            else {
 
                 cardSection.style.display = "block";
                 eftSection.style.display = "none";
+
+                // Enable card inputs
+                cardInputs.forEach(input => {
+                    input.disabled = false;
+                });
             }
         }
 
-        radios.forEach(r => r.addEventListener("change", toggle));
+        radios.forEach(r =>
+            r.addEventListener("change", toggle)
+        );
 
         toggle();
     });

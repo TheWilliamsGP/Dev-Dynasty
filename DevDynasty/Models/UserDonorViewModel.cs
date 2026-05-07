@@ -1,9 +1,17 @@
-﻿namespace DevDynasty.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DevDynasty.Models
 {
     public class UserDonorViewModel
     {
+        [Required(ErrorMessage = "Full name is required.")]
         public string DonorName { get; set; }
+
+        [Required(ErrorMessage = "Email address is required.")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email.")]
         public string DonorEmail { get; set; }
+
+        [Required(ErrorMessage = "Country is required.")]
         public string Field { get; set; }
     }
 
