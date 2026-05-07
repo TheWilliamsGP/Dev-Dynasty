@@ -14,7 +14,7 @@ namespace DevDynasty.Controllers
             _supabase = supabase;
         }
 
-        //Donation page
+        //donations page
         public IActionResult Index()
         {
             return View();
@@ -24,12 +24,26 @@ namespace DevDynasty.Controllers
         public IActionResult Index(UserDonationViewModel model)
         {
             TempData["Donation"] = JsonSerializer.Serialize(model);
+
             return RedirectToAction("DonorDetails");
         }
 
-        //Donor details
+        //donor details
         public IActionResult DonorDetails()
         {
+            var donationData = JsonSerializer.Deserialize<UserDonationViewModel>(
+                TempData["Donation"]?.ToString()
+            );
+
+            if (donationData == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            TempData.Keep("Donation");
+
+            ViewBag.IsMonetary = donationData.IsMonetary;
+
             return View();
         }
 
@@ -45,6 +59,7 @@ namespace DevDynasty.Controllers
                 return RedirectToAction("Index");
             }
 
+            //creates donor
             var donor = await _supabase.CreateDonor(new
             {
                 donarname = donorModel.DonorName,
@@ -57,14 +72,36 @@ namespace DevDynasty.Controllers
                 throw new Exception("Donor ID was not returned from Supabase");
             }
 
-            //Store donor for payment step
+            //stores donor for the next step
             TempData["Donor"] = JsonSerializer.Serialize(donor);
             TempData.Keep("Donation");
 
-            return RedirectToAction("Payment");
+            //monetary donation
+            if (donationData.IsMonetary)
+            {
+                return RedirectToAction("Payment");
+            }
+
+            //non-monetary donation
+            await _supabase.CreateDonation(new DonationDto
+            {
+                donarid = donor.donarid.Value,
+
+                donationamount = 0,
+
+                ismonetary = false,
+
+                donationdate = DateTime.UtcNow,
+
+                donationcontent = donationData.DonationContent,
+
+                isanonymous = donationData.IsAnonymous
+            });
+
+            return RedirectToAction("Success");
         }
 
-        //Payment step
+        //payment page
         public IActionResult Payment()
         {
             return View();
@@ -81,7 +118,6 @@ namespace DevDynasty.Controllers
                 TempData["Donor"]?.ToString()
             );
 
-            // Keep TempData alive for this request
             TempData.Keep("Donation");
             TempData.Keep("Donor");
 
@@ -90,19 +126,20 @@ namespace DevDynasty.Controllers
                 return RedirectToAction("Index");
             }
 
-            //If user chooses credit card
+            //card payment
             if (model.PaymentType == "Card")
             {
+                //save card if checked
                 if (model.SaveCard)
                 {
-                    //Validate card number
+                    //card number validation
                     if (!long.TryParse(model.CardNumber, out long parsedCard))
                     {
                         ModelState.AddModelError("", "Invalid card number");
                         return View(model);
                     }
 
-                    //Validate expiry
+                    //Expiry validation
                     if (string.IsNullOrEmpty(model.Expiry) || !model.Expiry.Contains("/"))
                     {
                         ModelState.AddModelError("", "Invalid expiry format");
@@ -114,13 +151,17 @@ namespace DevDynasty.Controllers
                     var card = new CardDto
                     {
                         donarid = donor.donarid.Value,
+
                         cardnumber = parsedCard,
+
                         cardexpiry = new DateTime(
-                            int.Parse("20" + expiryParts[1]), //Year
-                            int.Parse(expiryParts[0]),        //Month
+                            int.Parse("20" + expiryParts[1]),
+                            int.Parse(expiryParts[0]),
                             1
                         ),
+
                         cardjoindate = DateTime.UtcNow,
+
                         cardtype = model.CardType
                     };
 
@@ -128,23 +169,26 @@ namespace DevDynasty.Controllers
                 }
             }
 
-            //Create donation
+            //Monetary donation creation
             await _supabase.CreateDonation(new DonationDto
             {
                 donarid = donor.donarid.Value,
-                donationamount = donationData.DonationAmount,
+
+                donationamount = donationData.DonationAmount ?? 0,
+
                 ismonetary = true,
+
                 donationdate = DateTime.UtcNow,
-                donationcontent = model.PaymentType == "EFT"
-                    ? "EFT - Pending"
-                    : "Card Payment",
+
+                donationcontent = "Monetary Donation",
+
                 isanonymous = donationData.IsAnonymous
             });
 
             return RedirectToAction("Success");
         }
 
-        //Donation created successfully
+        //Success!
         public IActionResult Success()
         {
             return View();

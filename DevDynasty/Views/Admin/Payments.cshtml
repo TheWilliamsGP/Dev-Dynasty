@@ -1,30 +1,73 @@
 ﻿@model List<AdminPaymentViewModel>
 
-<h2 class="text-2xl font-bold mb-6">Payments</h2>
+<section class="section-light min-h-screen py-10">
 
-<table class="w-full text-left">
+    <div class="max-w-7xl mx-auto px-6">
 
-    <thead class="border-b text-gray-500 text-sm">
-        <tr>
-            <th class="py-3">Donor</th>
-            <th>Card</th>
-            <th>Type</th>
-            <th>Expiry</th>
-        </tr>
-    </thead>
+        <div class="mb-8">
 
-    <tbody>
-        @foreach (var c in Model)
-        {
-            <tr class="border-b hover:bg-gray-50">
-                <td class="py-3">@c.DonorName</td>
-                <td class="font-mono">
-                    **** **** **** @c.CardNumber.ToString().Substring(c.CardNumber.ToString().Length - 4)
-                </td>
-                <td>@c.CardType</td>
-                <td>@c.Expiry.ToShortDateString()</td>
-            </tr>
-        }
-    </tbody>
+            <h2 class="text-3xl font-bold">
+                Payments
+            </h2>
 
-</table>
+            <p class="text-gray-500 mt-2">
+                Saved card information linked to donors.
+            </p>
+
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-2xl p-8">
+
+            <table class="w-full text-left">
+
+                <thead class="border-b text-gray-500 text-sm">
+
+                    <tr>
+                        <th class="py-4">Donor</th>
+                        <th>Card Number</th>
+                        <th>Card Type</th>
+                        <th>Expiry</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var c in Model)
+                    {
+                        <tr class="border-b hover:bg-gray-50">
+
+                            <td class="py-4 font-medium">
+                                @c.DonorName
+                            </td>
+
+                            <td class="font-mono">
+                                **** **** **** @c.CardNumber.ToString().Substring(c.CardNumber.ToString().Length - 4)
+                            </td>
+
+                            <td>
+
+                                <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">
+
+                                    @c.CardType
+
+                                </span>
+
+                            </td>
+
+                            <td>
+                                @c.Expiry.ToShortDateString()
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
