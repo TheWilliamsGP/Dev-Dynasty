@@ -1,110 +1,232 @@
 ﻿@model DevDynasty.Models.UserPaymentViewModel
 
-<div class="min-h-screen bg-gray-100 flex justify-center items-center">
-    <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-xl">
+<section class="section-light min-h-screen flex items-center">
 
-        <h2 class="text-2xl font-bold text-center mb-6">Complete Your Donation</h2>
+    <div class="content-container">
 
-        <form asp-action="Payment" method="post">
+        <div class="bg-white rounded-xl shadow-lg p-10 max-w-2xl mx-auto">
 
-            <!-- PAYMENT METHOD -->
-            <div class="mb-6">
-                <label class="block font-semibold mb-2">Payment Method</label>
+            <!-- Heading -->
+            <div class="text-center mb-8">
 
-                <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
-                        <input type="radio" asp-for="PaymentType" value="Card" checked />
-                        Card
-                    </label>
+                <h2 class="text-3xl font-bold">Complete Your Donation</h2>
 
-                    <label class="flex items-center gap-2">
-                        <input type="radio" asp-for="PaymentType" value="EFT" />
-                        EFT
-                    </label>
-                </div>
-            </div>
-
-            <!-- CARD SECTION -->
-            <div id="cardSection">
-
-                <!-- Card Type -->
-                <div class="mb-3">
-                    <label class="block font-semibold mb-1">Card Type</label>
-                    <select asp-for="CardType" class="w-full border rounded p-2">
-                        <option value="Credit">Credit Card</option>
-                        <option value="Debit">Debit Card</option>
-                    </select>
-                </div>
-
-                <!-- Card Number -->
-                <input asp-for="CardNumber"
-                       placeholder="Card Number"
-                       class="w-full border rounded p-2 mb-3" />
-
-                <!-- Expiry -->
-                <input asp-for="Expiry"
-                       placeholder="MM/YY"
-                       class="w-full border rounded p-2 mb-3" />
-
-                <!-- Save Card -->
-                <label class="flex items-center mt-3">
-                    <input asp-for="SaveCard" type="checkbox" class="mr-2" />
-                    Save card for future donations
-                </label>
-
-            </div>
-
-            <!-- EFT SECTION -->
-            <div id="eftSection" style="display:none;" class="mt-6 p-4 border rounded bg-gray-50">
-
-                <h4 class="font-semibold mb-2">Bank Details</h4>
-
-                <p><strong>Bank:</strong> Standard Bank</p>
-                <p><strong>Account Number:</strong> 071270728</p>
-                <p><strong>Branch Code:</strong> 051001</p>
-                <p><strong>Reference:</strong> Your Name & Surname</p>
-
-                <p class="text-sm text-gray-600 mt-2">
-                    Please complete the EFT using your banking app. Your donation will be marked as pending until received.
+                <p class="mt-3 text-gray-600">
+                    Thank you for supporting mental health recovery and community care.
+                    Please choose your preferred payment method below.
                 </p>
 
             </div>
 
-            <!-- SUBMIT -->
-            <button type="submit"
-                    class="w-full mt-6 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                Complete Donation
-            </button>
+            <form asp-action="Payment" method="post" class="space-y-6">
 
-        </form>
+                <div asp-validation-summary="All"
+                     class="text-red-500 text-sm">
+                </div>
+
+                <!-- PAYMENT METHOD -->
+                <div>
+
+                    <label class="block text-sm font-semibold mb-3">
+                        Payment Method
+                    </label>
+
+                    <div class="flex gap-6">
+
+                        <label class="flex items-center gap-2 text-gray-700">
+                            <input type="radio"
+                                   asp-for="PaymentType"
+                                   value="Card"
+                                   checked />
+
+                            Card
+                        </label>
+
+                        <label class="flex items-center gap-2 text-gray-700">
+                            <input type="radio"
+                                   asp-for="PaymentType"
+                                   value="EFT" />
+
+                            EFT
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- CARD SECTION -->
+                <div id="cardSection" class="space-y-5">
+
+                    <!-- Card Type -->
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Card Type
+                        </label>
+
+                        <select asp-for="CardType"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3
+                                       focus:outline-none focus:ring-2 focus:ring-green-600">
+
+                            <option value="Credit">Credit Card</option>
+                            <option value="Debit">Debit Card</option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Card Number -->
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Card Number
+                        </label>
+
+                        <input asp-for="CardNumber"
+                               placeholder="Enter card number"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-3
+                                      focus:outline-none focus:ring-2 focus:ring-green-600" />
+
+                    </div>
+
+                    <!-- Expiry -->
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Expiry Date
+                        </label>
+
+                        <input asp-for="Expiry"
+                               placeholder="MM/YY"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-3
+                                      focus:outline-none focus:ring-2 focus:ring-green-600" />
+
+                    </div>
+
+                    <!-- Save Card -->
+                    <label class="flex items-center text-gray-700">
+
+                        <input asp-for="SaveCard"
+                               type="checkbox"
+                               class="mr-3 h-4 w-4" />
+
+                        Save card for future donations
+
+                    </label>
+
+                </div>
+
+                <!-- EFT SECTION -->
+                <div id="eftSection"
+                     style="display:none;"
+                     class="bg-gray-50 border border-gray-200 rounded-xl p-6">
+
+                    <h4 class="text-xl font-semibold mb-4">
+                        EFT Banking Details
+                    </h4>
+
+                    <div class="space-y-2 text-gray-700">
+
+                        <p>
+                            <strong>Bank:</strong>
+                            Standard Bank
+                        </p>
+
+                        <p>
+                            <strong>Account Number:</strong>
+                            071270728
+                        </p>
+
+                        <p>
+                            <strong>Branch Code:</strong>
+                            051001
+                        </p>
+
+                        <p>
+                            <strong>Reference:</strong>
+                            Your Name & Surname
+                        </p>
+
+                    </div>
+
+                    <p class="text-sm text-gray-500 mt-4">
+                        Please complete the EFT using your banking application.
+                        Your donation will be marked as pending until payment reflects.
+                    </p>
+
+                </div>
+
+                <!-- SUBMIT -->
+                <button type="submit"
+                        class="btn-donate w-full text-center">
+                    Complete Donation
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
-</div>
+
+</section>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        const radios = document.querySelectorAll('input[name="PaymentType"]');
-        const cardSection = document.getElementById("cardSection");
-        const eftSection = document.getElementById("eftSection");
+        const radios =
+            document.querySelectorAll('input[name="PaymentType"]');
+
+        const cardSection =
+            document.getElementById("cardSection");
+
+        const eftSection =
+            document.getElementById("eftSection");
+
+        // ALL card inputs
+        const cardInputs =
+            cardSection.querySelectorAll("input, select");
 
         function toggle() {
-            const selectedRadio = document.querySelector('input[name="PaymentType"]:checked');
+
+            const selectedRadio =
+                document.querySelector(
+                    'input[name="PaymentType"]:checked'
+                );
 
             if (!selectedRadio) return;
 
             const selected = selectedRadio.value;
 
+            // EFT SELECTED
             if (selected === "EFT") {
+
                 cardSection.style.display = "none";
                 eftSection.style.display = "block";
-            } else {
+
+                // Disable card inputs
+                cardInputs.forEach(input => {
+                    input.disabled = true;
+                });
+
+            }
+
+            // CARD SELECTED
+            else {
+
                 cardSection.style.display = "block";
                 eftSection.style.display = "none";
+
+                // Enable card inputs
+                cardInputs.forEach(input => {
+                    input.disabled = false;
+                });
             }
         }
 
-        radios.forEach(r => r.addEventListener("change", toggle));
+        radios.forEach(r =>
+            r.addEventListener("change", toggle)
+        );
 
-        toggle(); 
+        toggle();
     });
 </script>

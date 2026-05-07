@@ -2,108 +2,175 @@
     var currentPath = Context.Request.Path.Value?.ToLowerInvariant() ?? "/";
     var volunteerId = Context.Session.GetString("VolunteerId");
     var isLoggedIn = !string.IsNullOrWhiteSpace(volunteerId);
+    var isAdmin = currentPath.StartsWith("/admin");
 }
 
 <header class="header">
     <div class="container">
 
         <!-- Logo -->
-        <a href="/" class="logo">
-            <div class="logo-circle">FOVT</div>
+        <a href="@(isAdmin ? "/Admin/Dashboard" : "/")" class="logo">
+            <div class="logo-circle">
+                @(isAdmin ? "ADMIN" : "FOVT")
+            </div>
         </a>
 
         <!-- Navigation -->
         <nav>
             <ul class="nav-links">
 
-                <li>
-                    <a href="/" class="@(currentPath == "/" ? "nav-link-active" : "")">
-                        Home
-                    </a>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#">About</a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="/about" class="@(currentPath == "/about" ? "nav-link-active" : "")">
-                                About Us
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/services" class="@(currentPath == "/services" ? "nav-link-active" : "")">
-                                Services
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/Home/Reports" class="@(currentPath == "/home/reports" ? "nav-link-active" : "")">
-                                Reports
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/contact" class="@(currentPath == "/contact" ? "nav-link-active" : "")">
-                                Contact
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#">Get Involved</a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="/events" class="@(currentPath == "/events" ? "nav-link-active" : "")">
-                                Events
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/volunteer" class="@(currentPath == "/volunteer" ? "nav-link-active" : "")">
-                                Volunteer
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="/community" class="@(currentPath == "/community" ? "nav-link-active" : "")">
-                        Community
-                    </a>
-                </li>
-
-                @if (isLoggedIn)
+                @if (isAdmin)
                 {
+                    <!-- ADMIN NAV -->
                     <li>
-                        <a href="/volunteer/dashboard/@volunteerId" class="@(currentPath.StartsWith("/volunteer/dashboard") ? "nav-link-active" : "")">
-                            Dashboard
+                        <a href="/Admin/Dashboard"
+                           class="@(currentPath.StartsWith("/admin/dashboard") ? "nav-link-active" : "")">
+                            Home
                         </a>
                     </li>
 
                     <li>
-                        <a href="/account/logout">
-                            Logout
+                        <a href="/admin/events"
+                           class="@(currentPath.StartsWith("/admin/events") ? "nav-link-active" : "")">
+                            Events
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Admin/Donations"
+                           class="@(currentPath.StartsWith("/admin/donations") ? "nav-link-active" : "")">
+                            Donations
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Admin/Donors"
+                           class="@(currentPath.StartsWith("/admin/donors") ? "nav-link-active" : "")">
+                            Donors
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Admin/Payments"
+                           class="@(currentPath.StartsWith("/admin/payments") ? "nav-link-active" : "")">
+                            Payments
                         </a>
                     </li>
                 }
                 else
                 {
+                    <!-- PUBLIC / VOLUNTEER NAV -->
                     <li>
-                        <a href="/account/login" class="@(currentPath == "/account/login" ? "nav-link-active" : "")">
-                            Login
+                        <a href="/" class="@(currentPath == "/" ? "nav-link-active" : "")">
+                            Home
                         </a>
                     </li>
 
+                    <li class="dropdown">
+                        <a href="#">About</a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/about" class="@(currentPath == "/about" ? "nav-link-active" : "")">
+                                    About Us
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/services" class="@(currentPath == "/services" ? "nav-link-active" : "")">
+                                    Services
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/Home/Reports" class="@(currentPath == "/home/reports" ? "nav-link-active" : "")">
+                                    Reports
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/contact" class="@(currentPath == "/contact" ? "nav-link-active" : "")">
+                                    Contact
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#">Get Involved</a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/events" class="@(currentPath == "/events" ? "nav-link-active" : "")">
+                                    Events
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/volunteer" class="@(currentPath == "/volunteer" ? "nav-link-active" : "")">
+                                    Volunteer
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li>
-                        <a href="/account/register" class="@(currentPath == "/account/register" ? "nav-link-active" : "")">
-                            Register
+                        <a href="/community" class="@(currentPath == "/community" ? "nav-link-active" : "")">
+                            Community
                         </a>
                     </li>
+
+                    @if (isLoggedIn)
+                    {
+                        <li>
+                            <a href="/volunteer/dashboard/@volunteerId"
+                               class="@(currentPath.StartsWith("/volunteer/dashboard") ? "nav-link-active" : "")">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/account/logout">
+                                Logout
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/account/login"
+                               class="@(currentPath == "/account/login" ? "nav-link-active" : "")">
+                                Login
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/account/register"
+                               class="@(currentPath == "/account/register" ? "nav-link-active" : "")">
+                                Register
+                            </a>
+                        </li>
+                    }
                 }
 
             </ul>
         </nav>
 
         <!-- CTA -->
-        <a href="/donate" class="btn-donate">Donate</a>
+        <div class="header-actions">
+            @if (isAdmin)
+            {
+                <a href="/" class="btn-login">
+                    View Site
+                </a>
+            }
+            else
+            {
+                <a href="/donate" class="btn-donate">
+                    Donate
+                </a>
+            }
+        </div>
 
     </div>
 </header>

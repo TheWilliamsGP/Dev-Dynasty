@@ -1,58 +1,170 @@
 ﻿@model AdminDashboardViewModel
 
-<div class="p-6">
+<section class="section-light min-h-screen py-10 ">
 
-    <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+    <div class="max-w-7xl mx-auto px-6 bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
 
-    <!-- STATS -->
-    <div class="grid grid-cols-4 gap-4 mb-6">
+        <!-- HEADER -->
+        <div class="mb-10">
 
-        <div class="bg-white p-4 rounded shadow">
-            <h4>Total Donations</h4>
-            <p class="text-2xl font-bold">R @Model.TotalAmount</p>
+            <h1 class="text-4xl font-bold">
+                Admin Dashboard
+            </h1>
+
+            <p class="text-gray-600 mt-2">
+                Monitor donations, donors, payments, and organisation activity.
+            </p>
+
         </div>
 
-        <div class="bg-white p-4 rounded shadow">
-            <h4>Number of Donations</h4>
-            <p class="text-2xl font-bold">@Model.TotalDonations</p>
+        <!-- QUICK ACTION -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+
+            <div class="flex justify-between items-center">
+
+                <div>
+
+                    <h3 class="text-xl font-semibold">
+                        Quick Actions
+                    </h3>
+
+                    <p class="text-gray-500 text-sm mt-1">
+                        Manage events and donation activity.
+                    </p>
+
+                </div>
+
+                <a href="/Admin/AddEvent"
+                   class="btn-donate">
+                    + Add Event
+                </a>
+
+            </div>
+
         </div>
 
-        <div class="bg-white p-4 rounded shadow">
-            <h4>Card Payments</h4>
-            <p class="text-2xl font-bold">@Model.TotalCardPayments</p>
+        <!-- STATS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6 mb-10">
+
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
+                <p class="text-gray-500 text-sm">
+                    Total Donations
+                </p>
+
+                <h3 class="text-3xl font-bold mt-2">
+                    R @Model.TotalAmount
+                </h3>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
+                <p class="text-gray-500 text-sm">
+                    Number of Donations
+                </p>
+
+                <h3 class="text-3xl font-bold mt-2">
+                    @Model.TotalDonations
+                </h3>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
+                <p class="text-gray-500 text-sm">
+                    Credit/Debit Cards
+                </p>
+
+                <h3 class="text-3xl font-bold mt-2">
+                    @Model.TotalCardPayments
+                </h3>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
+                <p class="text-gray-500 text-sm">
+                    EFT Payments
+                </p>
+
+                <h3 class="text-3xl font-bold mt-2">
+                    @Model.TotalEftPayments
+                </h3>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
+                <p class="text-gray-500 text-sm">
+                    Goods Donations
+                </p>
+
+                <h3 class="text-3xl font-bold mt-2">
+                    @Model.TotalGoodsDonations
+                </h3>
+            </div>
+
         </div>
 
-        <div class="bg-white p-4 rounded shadow">
-            <h4>EFT Payments</h4>
-            <p class="text-2xl font-bold">@Model.TotalEftPayments</p>
+        <!-- RECENT DONATIONS -->
+        <div class="mb-6 text-left">
+
+            <h3 class="text-2xl font-bold">
+                Recent Donations
+            </h3>
+
+            <p class="text-gray-500 mt-1">
+                Latest donation activity across the platform.
+            </p>
+
         </div>
 
-    </div>
 
-    <!-- RECENT DONATIONS -->
-    <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-xl mb-4">Recent Donations</h3>
+            <table class="w-full text-left">
 
-        <table class="w-full border">
-            <thead>
-                <tr class="border-b">
-                    <th class="text-left p-2">Amount</th>
-                    <th class="text-left p-2">Type</th>
-                    <th class="text-left p-2">Date</th>
-                </tr>
-            </thead>
+                <thead class="border-b text-gray-500 text-sm">
 
-            <tbody>
-                @foreach (var d in Model.RecentDonations)
-                {
-                    <tr class="border-b">
-                        <td class="p-2">R @d.donationamount</td>
-                        <td class="p-2">@d.donationcontent</td>
-                        <td class="p-2">@d.donationdate.ToShortDateString()</td>
+                    <tr>
+                        <th class="py-4">Amount</th>
+                        <th>Content</th>
+                        <th>Type</th>
+                        <th>Date</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var d in Model.RecentDonations)
+                    {
+                        <tr class="border-b hover:bg-gray-50">
+
+                            <td class="py-4 font-semibold">
+                                @(d.ismonetary ? $"R {d.donationamount}" : "-")
+                            </td>
+
+                            <td>
+                                @d.donationcontent
+                            </td>
+
+                            <td>
+
+                                <span class="px-3 py-1 rounded-full text-sm
+                                        @(d.ismonetary
+                                                                              ? "bg-green-100 text-green-700"
+                                                                              : "bg-blue-100 text-blue-700")">
+
+                                @(d.ismonetary ? "Monetary" : "Goods")
+
+                                </span>
+
+                            </td>
+
+                            <td>
+                                @d.donationdate.ToShortDateString()
+                            </td>
+
+                        </tr>
+                                        }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
-</div>
+</section>

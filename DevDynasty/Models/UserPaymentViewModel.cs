@@ -1,11 +1,13 @@
-﻿namespace DevDynasty.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DevDynasty.Models
 {
     public class UserPaymentViewModel
     {
-        public string PaymentType { get; set; } //Credit or EFT
-        public string CardType { get; set; } //Credit or Debit
-        public string CardNumber { get; set; }
-        public string Expiry { get; set; }
+        public string? PaymentType { get; set; } //Credit or EFT
+        public string? CardType { get; set; } //Credit or Debit
+        public string? CardNumber { get; set; }
+        public string? Expiry { get; set; }
         public bool SaveCard { get; set; }
     }
 

@@ -1,31 +1,160 @@
 ﻿@model DevDynasty.Models.UserDonationViewModel
 
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
+<section class="section-light min-h-screen flex items-center">
 
-        <h2 class="text-2xl font-bold text-center mb-6">Make a Donation</h2>
+    <div class="content-container">
 
-        <form asp-action="Index" method="post" class="space-y-4">
+        <div class="bg-white rounded-xl shadow-lg p-10 max-w-2xl mx-auto">
 
-            <div>
-                <label asp-for="DonationAmount" class="block text-sm font-medium mb-1"></label>
-                <input asp-for="DonationAmount" type="number"
-                       class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       placeholder="Enter amount"
-                       required />
-                <span asp-validation-for="DonationAmount" class="text-red-500 text-sm"></span>
+            <!-- Heading -->
+            <div class="text-center mb-8">
+
+                <h2 class="text-3xl font-bold">Make a Donation</h2>
+
+                <p class="mt-3 text-gray-600">
+                    Your contribution helps support mental health recovery,
+                    dignity, and community care initiatives.
+                </p>
+
             </div>
 
-            <div class="flex items-center">
-                <input asp-for="IsAnonymous" type="checkbox" class="mr-2" />
-                <label class="text-sm">Donate anonymously</label>
-            </div>
+            <form asp-action="Index" method="post" class="space-y-6">
 
-            <button type="submit"
-                    class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
-                Next
-            </button>
+                <div asp-validation-summary="All"
+                     class="text-red-500 text-sm">
+                </div>
 
-        </form>
+                <!-- Donation Type -->
+                <div>
+
+                    <label class="block text-sm font-semibold mb-3">
+                        Donation Type
+                    </label>
+
+                    <div class="flex gap-6">
+
+                        <label class="flex items-center gap-2 text-gray-700">
+
+                            <input type="radio"
+                                   asp-for="IsMonetary"
+                                   value="true"
+                                   checked />
+
+                            Money Donation
+
+                        </label>
+
+                        <label class="flex items-center gap-2 text-gray-700">
+
+                            <input type="radio"
+                                   asp-for="IsMonetary"
+                                   value="false" />
+
+                            Goods / Supplies Donation
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- MONETARY SECTION -->
+                <div id="moneySection">
+
+                    <label asp-for="DonationAmount"
+                           class="block text-sm font-semibold mb-2">
+                        Donation Amount
+                    </label>
+
+                    <input asp-for="DonationAmount"
+                           type="number"
+                           placeholder="Enter donation amount"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3
+                                  focus:outline-none focus:ring-2 focus:ring-green-600" />
+
+                    <span asp-validation-for="DonationAmount"
+                          class="text-red-500 text-sm"></span>
+
+                </div>
+
+                <!-- NON MONETARY SECTION -->
+                <div id="goodsSection" style="display:none;">
+
+                    <label asp-for="DonationContent"
+                           class="block text-sm font-semibold mb-2">
+                        Donation Description
+                    </label>
+
+                    <textarea asp-for="DonationContent"
+                              rows="4"
+                              placeholder="Example: 25x T-Shirts, 50x boxes of toothpaste..."
+                              class="w-full border border-gray-300 rounded-lg px-4 py-3
+                                     focus:outline-none focus:ring-2 focus:ring-green-600"></textarea>
+
+                    <span asp-validation-for="DonationContent"
+                          class="text-red-500 text-sm"></span>
+
+                </div>
+
+                <!-- Anonymous -->
+                <div class="flex items-center">
+
+                    <input asp-for="IsAnonymous"
+                           type="checkbox"
+                           class="mr-3 h-4 w-4" />
+
+                    <label class="text-gray-700">
+                        Donate anonymously
+                    </label>
+
+                </div>
+
+                <!-- Submit -->
+                <button type="submit"
+                        class="btn-donate w-full text-center">
+                    Continue
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
-</div>
+
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const radios = document.querySelectorAll('input[name="IsMonetary"]');
+
+        const moneySection = document.getElementById("moneySection");
+        const goodsSection = document.getElementById("goodsSection");
+
+        function toggleDonationType() {
+
+            const selected =
+                document.querySelector('input[name="IsMonetary"]:checked');
+
+            if (!selected) return;
+
+            if (selected.value === "true") {
+
+                moneySection.style.display = "block";
+                goodsSection.style.display = "none";
+
+            }
+            else {
+
+                moneySection.style.display = "none";
+                goodsSection.style.display = "block";
+            }
+        }
+
+        radios.forEach(r =>
+            r.addEventListener("change", toggleDonationType)
+        );
+
+        toggleDonationType();
+    });
+</script>
