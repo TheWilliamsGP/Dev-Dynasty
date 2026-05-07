@@ -5,16 +5,190 @@
 
 <partial name="_PageHero" />
 
-<section class="mx-auto max-w-2xl px-4 py-16">
-    <form class="space-y-4" method="post" action="#">
-        <input class="w-full rounded-md border bg-background px-4 py-3" placeholder="Your Name" name="Name" />
+<!-- CONTACT FORM -->
+<section class="section-light">
+    <div class="content-container">
 
-        <input class="w-full rounded-md border bg-background px-4 py-3" placeholder="Email Address" type="email" name="Email" />
+        <div class="text-center">
+            <h2>Send Us a Message</h2>
 
-        <textarea class="w-full rounded-md border bg-background px-4 py-3" rows="5" placeholder="Your Message" name="Message"></textarea>
+            <p class="mt-4">
+                Whether you would like to volunteer, donate, collaborate,
+                or simply learn more about our work, we welcome your message.
+            </p>
+        </div>
 
-        <button type="button" class="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
-            Send Message
-        </button>
-    </form>
+        <form class="space-y-4 mt-10 contact-form" method="post" action="#">
+
+            <input class="w-full rounded-md border bg-background px-4 py-3"
+                   placeholder="Your Name"
+                   name="Name" />
+
+            <input class="w-full rounded-md border bg-background px-4 py-3"
+                   placeholder="Email Address"
+                   type="email"
+                   name="Email" />
+
+            <textarea class="w-full rounded-md border bg-background px-4 py-3"
+                      rows="6"
+                      placeholder="Your Message"
+                      name="Message"></textarea>
+
+            <div class="text-center">
+                <button type="button"
+                        class="btn-donate mt-4">
+                    Send Message
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</section>
+
+<!-- CONTACT DETAILS -->
+<section class="section-alt">
+    <div class="content-container text-center">
+
+        <h2>Contact Information</h2>
+
+        <p class="mt-4">
+            Friends of Valkenberg Trust works closely with Valkenberg Hospital
+            and the surrounding community to support mental health recovery,
+            dignity, and care.
+        </p>
+
+        <div class="contact-grid mt-10">
+
+            <div class="card">
+                <h3>General Enquiries</h3>
+
+                <p class="mt-4">
+                    Email: info@fovt.org
+                </p>
+
+                <p class="mt-4">
+                    Valkenberg Hospital<br />
+                    Observatory<br />
+                    Cape Town<br />
+                    South Africa
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Office Hours</h3>
+
+                <p class="mt-4">
+                    Monday – Friday
+                </p>
+
+                <p class="mt-2">
+                    08:00 – 16:00
+                </p>
+
+                <p class="mt-4">
+                    Closed on weekends and public holidays.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- KEY CONTACTS -->
+<section class="section-light">
+    <div class="content-container text-center">
+
+        <h2>Key Contacts</h2>
+
+        <p class="mt-4">
+            Reach out directly to members of the Friends of Valkenberg Trust team.
+        </p>
+
+        <div class="contact-grid mt-10">
+
+            <div class="card">
+                <h3>Chairperson</h3>
+
+                <p class="mt-4">
+                    Friends of Valkenberg Trust
+                </p>
+
+                <p class="mt-2">
+                    info@fovt.org
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Volunteer Coordination</h3>
+
+                <p class="mt-4">
+                    Volunteer Programme Team
+                </p>
+
+                <p class="mt-2">
+                    volunteers@fovt.org
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Donations & Partnerships</h3>
+
+                <p class="mt-4">
+                    Community Partnerships Team
+                </p>
+
+                <p class="mt-2">
+                    donations@fovt.org
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- GOOGLE MAP -->
+<section class="section-alt">
+    <div class="content-container text-center">
+
+        <h2>Find Us</h2>
+
+        <p class="mt-4">
+            Friends of Valkenberg Trust is based at Valkenberg Hospital in Observatory, Cape Town.
+        </p>
+
+        <div class="map-container mt-10">
+
+            <iframe src="https://www.google.com/maps?q=Valkenberg+Hospital+Cape+Town&output=embed"
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section-light">
+    <div class="content-container text-center">
+
+        <h2>Support Our Mission</h2>
+
+        <p class="mt-4">
+            Every volunteer, donor, and supporter helps us improve the lives
+            of patients and strengthen mental health support within our community.
+        </p>
+
+        <a href="/Home/Donate" class="btn-donate mt-6">
+            Make a Difference
+        </a>
+
+    </div>
 </section>
