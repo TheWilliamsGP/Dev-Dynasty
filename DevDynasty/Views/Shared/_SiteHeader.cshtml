@@ -7,16 +7,18 @@
 
         <!-- Logo -->
         <a href="/" class="logo">
-            <div class="logo-circle">
-                FOVT
-            </div>
+            <div class="logo-circle">FOVT</div>
         </a>
 
         <!-- Navigation -->
-        <nav class="nav">
+        <nav>
             <ul class="nav-links">
 
-                <li><a href="/">Home</a></li>
+                <li>
+                    <a href="/" class="@(currentPath == "/" ? "nav-link-active" : "")">
+                        Home
+                    </a>
+                </li>
 
                 <li class="dropdown">
                     <a href="#">About</a>
@@ -36,59 +38,25 @@
                     </ul>
                 </li>
 
-    <nav class="bg-secondary">
-        <ul class="mx-auto hidden max-w-7xl flex-wrap items-center justify-center gap-1 px-4 py-3 md:flex">
-            <li>
-                <a href="/" class="nav-link @(currentPath == "/" ? "nav-link-active" : "")">Home</a>
-            </li>
-            <li>
-                <a href="/about" class="nav-link @(currentPath == "/about" ? "nav-link-active" : "")">About</a>
-            </li>
-            <li>
-                <a href="/services" class="nav-link @(currentPath == "/services" ? "nav-link-active" : "")">Services</a>
-            </li>
-            <li>
-                <a href="/donations" class="nav-link @(currentPath == "/donations" ? "nav-link-active" : "")">Donations</a>
-            </li>
-            <li>
-                <a href="/events" class="nav-link @(currentPath == "/events" ? "nav-link-active" : "")">Events</a>
-            </li>
-            <li>
-                <a href="/volunteer" class="nav-link @(currentPath == "/volunteer" ? "nav-link-active" : "")">Volunteer</a>
-            </li>
-            <li>
-                <a href="/resources" class="nav-link @(currentPath == "/resources" ? "nav-link-active" : "")">Resources</a>
-            </li>
-            <li>
-                <a href="/community" class="nav-link @(currentPath == "/community" ? "nav-link-active" : "")">Community</a>
-            </li>
-            <li>
-                <a href="/contact" class="nav-link @(currentPath == "/contact" ? "nav-link-active" : "")">Contact Us</a>
-            </li>
-            <li>
-                <a asp-controller="DonationUser" asp-action="Index"
-                   class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
-                    Donate Here
-                </a>
-            </li>
-        </ul>
+                <li>
+                    <a href="/Home/Community">Community</a>
+                </li>
 
-        <ul id="mobile-menu" class="mx-auto hidden max-w-7xl flex-col gap-1 px-4 py-3 md:hidden">
-            <li><a href="/" class="mobile-nav-link">Home</a></li>
-            <li><a href="/about" class="mobile-nav-link">About</a></li>
-            <li><a href="/services" class="mobile-nav-link">Services</a></li>
-            <li><a href="/donations" class="mobile-nav-link">Donations</a></li>
-            <li><a href="/events" class="mobile-nav-link">Events</a></li>
-            <li><a href="/volunteer" class="mobile-nav-link">Volunteer</a></li>
-            <li><a href="/resources" class="mobile-nav-link">Resources</a></li>
-            <li><a href="/community" class="mobile-nav-link">Community</a></li>
-            <li><a href="/contact" class="mobile-nav-link">Contact Us</a></li>
-            <li>
-                <a asp-controller="DonationUser" asp-action="Index"
-                   class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
-                    Donate Here
-                </a>
-            </li>
-        </ul>
-    </nav>
+            </ul>
+        </nav>
+
+        <!-- CTA -->
+        <div class="header-actions">
+
+            <a href="/Account/Login" class="btn-login">
+                Log In / Sign Up
+            </a>
+
+            <a href="/Home/Donate" class="btn-donate">
+                Donate
+            </a>
+
+        </div>
+
+    </div>
 </header>
