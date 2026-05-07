@@ -804,10 +804,13 @@ button {
 
 /* ---------- HERO SECTION ---------- */
 .hero {
-    background: linear-gradient( rgba(56, 42, 26, 0.9), rgba(39, 117, 165, 0.8) );
+    background: var(--rich-cerulean);
     color: white;
-    padding: 100px 20px;
+    padding: 120px 20px 100px;
     text-align: center;
+    border-bottom: 4px solid var(--pale-sky);
+    /* subtle depth */
+    box-shadow: inset 0 -10px 30px rgba(0,0,0,0.1);
 }
 
     .hero h1 {
@@ -936,6 +939,42 @@ section h2 {
         .gallery img:hover {
             transform: scale(1.05);
         }
+
+
+/* ---------- REPORT GRID ---------- */
+
+.report-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.report-item {
+    text-align: center;
+}
+
+    /* PDF preview */
+    .report-item iframe {
+        width: 100%;
+        height: 320px;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Title */
+    .report-item h3 {
+        margin-top: 12px;
+    }
+
+    /* Button spacing */
+    .report-item .btn-donate {
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+
 
 /* ---------- GENERAL SPACING IMPROVEMENT ---------- */
 section {

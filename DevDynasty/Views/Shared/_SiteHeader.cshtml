@@ -7,16 +7,18 @@
 
         <!-- Logo -->
         <a href="/" class="logo">
-            <div class="logo-circle">
-                FOVT
-            </div>
+            <div class="logo-circle">FOVT</div>
         </a>
 
         <!-- Navigation -->
-        <nav class="nav">
+        <nav>
             <ul class="nav-links">
 
-                <li><a href="/">Home</a></li>
+                <li>
+                    <a href="/" class="@(currentPath == "/" ? "nav-link-active" : "")">
+                        Home
+                    </a>
+                </li>
 
                 <li class="dropdown">
                     <a href="#">About</a>
@@ -36,22 +38,15 @@
                     </ul>
                 </li>
 
-                <li class="dropdown">
-                    <a href="#">Community</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/Home/Resources">Resources</a></li>
-                        <li><a href="/Home/Gallery">Gallery</a></li>
-                    </ul>
-                </li>
+                <li>
+                    <a href="/Home/Community">Community</a>
                 </li>
 
             </ul>
         </nav>
 
-        <!-- Right Side -->
-        <div class="nav-actions">
-            <a href="/Home/Donate" class="btn-donate">Donate</a>
-        </div>
+        <!-- CTA -->
+        <a href="/Home/Donate" class="btn-donate">Donate</a>
 
     </div>
 </header>

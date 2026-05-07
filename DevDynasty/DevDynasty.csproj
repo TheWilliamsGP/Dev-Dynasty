@@ -6,4 +6,30 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="wwwroot\NewFolder1\**" />
+    <Content Remove="wwwroot\NewFolder1\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder1\**" />
+    <None Remove="wwwroot\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\reports\annual-report-2013.pdf" />
+    <None Include="wwwroot\reports\annual-report-2014.pdf" />
+    <None Include="wwwroot\reports\annual-report-2015.pdf" />
+    <None Include="wwwroot\reports\annual-report-2016.pdf" />
+    <None Include="wwwroot\reports\Annual-Report-2017.pdf" />
+    <None Include="wwwroot\reports\Annual-Report-2019.pdf" />
+    <None Include="wwwroot\reports\annual-report-2020-2021.pdf" />
+    <None Include="wwwroot\reports\Annual-Report-2020.pdf" />
+    <None Include="wwwroot\reports\Annual-Report-2023-2024.pdf" />
+    <None Include="wwwroot\reports\Annual-Report-2023.pdf" />
+    <None Include="wwwroot\reports\Annual-Report-2025.pdf" />
+    <None Include="wwwroot\reports\annual-report-final-2018.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
+  </ItemGroup>
+
 </Project>
