@@ -15,6 +15,11 @@
         </p>
 
         <div class="mt-6 rounded-md bg-muted p-4">
+            @if (!string.IsNullOrWhiteSpace(Model.EventImageUrl))
+            {
+                <img src="@Model.EventImageUrl" alt="@Model.EventName" class="event-delete-image" />
+            }
+
             <p><strong>Event:</strong> @Model.EventName</p>
             <p><strong>Date:</strong> @Model.EventStartDate</p>
             <p><strong>Volunteers:</strong> @Model.JoinedVolunteers / @Model.RequiredVolunteers</p>

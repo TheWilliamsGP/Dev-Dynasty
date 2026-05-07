@@ -19,6 +19,22 @@
         <span asp-validation-for="EventDescription" class="form-error"></span>
     </div>
 
+    <div>
+        <label asp-for="EventImage" class="form-label"></label>
+        <input asp-for="EventImage" type="file" accept="image/*" class="form-input" />
+        <span asp-validation-for="EventImage" class="form-error"></span>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ExistingImageUrl))
+        {
+            <div class="mt-4">
+                <p class="text-sm text-muted-foreground">Current image:</p>
+                <img src="@Model.ExistingImageUrl" alt="@Model.EventName" class="event-image-preview" />
+            </div>
+
+            <input type="hidden" asp-for="ExistingImageUrl" />
+        }
+    </div>
+
     <div class="grid gap-4 md:grid-cols-2">
         <div>
             <label asp-for="EventStartDate" class="form-label"></label>
@@ -36,13 +52,23 @@
     <div>
         <label asp-for="LocationId" class="form-label"></label>
         <select asp-for="LocationId" class="form-input">
-            <option value="">No location selected</option>
+            <option value="">No existing location selected</option>
             @foreach (var location in Model.Locations)
             {
                 <option value="@location.LocationId">@location.DisplayName</option>
             }
         </select>
         <span asp-validation-for="LocationId" class="form-error"></span>
+
+        <p class="mt-2 text-sm text-muted-foreground">
+            Or type a new location below.
+        </p>
+    </div>
+
+    <div>
+        <label asp-for="NewLocationAddress" class="form-label"></label>
+        <input asp-for="NewLocationAddress" class="form-input" placeholder="Example: Valkenberg Hospital Hall, Observatory" />
+        <span asp-validation-for="NewLocationAddress" class="form-error"></span>
     </div>
 
     <div class="grid gap-4 md:grid-cols-2">

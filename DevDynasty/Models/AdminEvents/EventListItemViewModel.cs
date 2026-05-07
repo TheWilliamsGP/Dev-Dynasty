@@ -10,6 +10,7 @@
         public string? EventEndDate { get; set; }
         public Guid? LocationId { get; set; }
         public string? LocationAddress { get; set; }
+        public string? EventImageUrl { get; set; }
         public int RequiredVolunteers { get; set; }
         public int JoinedVolunteers { get; set; }
         public string EventStatus { get; set; } = "active";

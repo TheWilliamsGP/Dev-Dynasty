@@ -42,7 +42,22 @@
                     foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.EventName</td>
+                            <td>
+                                <div class="admin-event-cell">
+                                    @if (!string.IsNullOrWhiteSpace(item.EventImageUrl))
+                                    {
+                                        <img src="@item.EventImageUrl" alt="@item.EventName" class="admin-event-thumb" />
+                                    }
+
+                                    <div>
+                                        <strong>@item.EventName</strong>
+                                        @if (!string.IsNullOrWhiteSpace(item.EventDescription))
+                                        {
+                                            <p class="text-sm text-muted-foreground">@item.EventDescription</p>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
                             <td>@item.EventType</td>
                             <td>
                                 @item.EventStartDate

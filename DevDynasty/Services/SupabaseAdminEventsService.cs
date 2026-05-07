@@ -11,6 +11,7 @@ namespace DevDynasty.Services
         private readonly string _baseUrl;
         private readonly string _serviceRoleKey;
         private readonly JsonSerializerOptions _jsonOptions;
+        private readonly string _storageBucket;
 
         public SupabaseAdminEventsService(HttpClient httpClient, IConfiguration configuration)
         {
@@ -21,6 +22,8 @@ namespace DevDynasty.Services
 
             _serviceRoleKey = configuration["Supabase:ServiceRoleKey"]
                 ?? throw new InvalidOperationException("Supabase:ServiceRoleKey is missing.");
+
+            _storageBucket = configuration["Supabase:StorageBucket"] ?? "event-image";
 
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("apikey", _serviceRoleKey);
@@ -35,7 +38,7 @@ namespace DevDynasty.Services
         public async Task<List<EventListItemViewModel>> GetEventsAsync()
         {
             var events = await GetAsync<List<EventRow>>(
-                "/rest/v1/eventactivitytable?select=eventid,eventname,eventtype,eventdescription,eventstartdate,eventenddate,locationid,requiredvolunteers,eventstatus&order=eventstartdate.asc"
+                "/rest/v1/eventactivitytable?select=eventid,eventname,eventtype,eventdescription,eventstartdate,eventenddate,locationid,eventimageurl,requiredvolunteers,eventstatus&order=eventstartdate.asc"
             ) ?? new List<EventRow>();
 
             var votes = await GetAsync<List<EventVoteRow>>(
@@ -64,6 +67,7 @@ namespace DevDynasty.Services
                     EventEndDate = e.eventenddate,
                     LocationId = e.locationid,
                     LocationAddress = location?.LocationAddress,
+                    EventImageUrl = e.eventimageurl,
                     RequiredVolunteers = e.requiredvolunteers ?? 1,
                     JoinedVolunteers = joinedCounts.TryGetValue(e.eventid, out var count) ? count : 0,
                     EventStatus = e.eventstatus ?? "active"
@@ -80,7 +84,7 @@ namespace DevDynasty.Services
         public async Task<AdminEventFormViewModel?> GetEventFormByIdAsync(Guid eventId)
         {
             var rows = await GetAsync<List<EventRow>>(
-                $"/rest/v1/eventactivitytable?select=eventid,eventname,eventtype,eventdescription,eventstartdate,eventenddate,locationid,requiredvolunteers,eventstatus&eventid=eq.{eventId}"
+                $"/rest/v1/eventactivitytable?select=eventid,eventname,eventtype,eventdescription,eventstartdate,eventenddate,locationid,eventimageurl,requiredvolunteers,eventstatus&eventid=eq.{eventId}"
             );
 
             var row = rows?.FirstOrDefault();
@@ -97,6 +101,7 @@ namespace DevDynasty.Services
                 EventStartDate = row.eventstartdate,
                 EventEndDate = row.eventenddate,
                 LocationId = row.locationid,
+                ExistingImageUrl = row.eventimageurl,
                 RequiredVolunteers = row.requiredvolunteers ?? 1,
                 EventStatus = row.eventstatus ?? "active",
                 Locations = await GetLocationsAsync()
@@ -105,6 +110,9 @@ namespace DevDynasty.Services
 
         public async Task CreateEventAsync(AdminEventFormViewModel model)
         {
+            var newLocationId = await CreateLocationIfNeededAsync(model.NewLocationAddress);
+            var imageUrl = await UploadEventImageAsync(model.EventImage);
+
             var payload = new
             {
                 eventname = model.EventName,
@@ -112,7 +120,8 @@ namespace DevDynasty.Services
                 eventdescription = model.EventDescription,
                 eventstartdate = EmptyToNull(model.EventStartDate),
                 eventenddate = EmptyToNull(model.EventEndDate),
-                locationid = model.LocationId,
+                locationid = newLocationId ?? model.LocationId,
+                eventimageurl = imageUrl,
                 requiredvolunteers = model.RequiredVolunteers,
                 eventstatus = model.EventStatus
             };
@@ -125,6 +134,9 @@ namespace DevDynasty.Services
             if (!model.EventId.HasValue)
                 throw new InvalidOperationException("EventId is required for updating.");
 
+            var newLocationId = await CreateLocationIfNeededAsync(model.NewLocationAddress);
+            var uploadedImageUrl = await UploadEventImageAsync(model.EventImage);
+
             var payload = new
             {
                 eventname = model.EventName,
@@ -132,7 +144,8 @@ namespace DevDynasty.Services
                 eventdescription = model.EventDescription,
                 eventstartdate = EmptyToNull(model.EventStartDate),
                 eventenddate = EmptyToNull(model.EventEndDate),
-                locationid = model.LocationId,
+                locationid = newLocationId ?? model.LocationId,
+                eventimageurl = uploadedImageUrl ?? model.ExistingImageUrl,
                 requiredvolunteers = model.RequiredVolunteers,
                 eventstatus = model.EventStatus
             };
@@ -253,6 +266,83 @@ namespace DevDynasty.Services
             );
         }
 
+        private async Task<Guid?> CreateLocationIfNeededAsync(string? newLocationAddress)
+        {
+            if (string.IsNullOrWhiteSpace(newLocationAddress))
+                return null;
+
+            var payload = new
+            {
+                locationaddress = newLocationAddress.Trim()
+            };
+
+            using var request = new HttpRequestMessage(
+                HttpMethod.Post,
+                _baseUrl + "/rest/v1/locationtable?select=locationid"
+            );
+
+            request.Headers.Add("Prefer", "return=representation");
+
+            var json = JsonSerializer.Serialize(payload);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new InvalidOperationException($"Supabase create location failed: {response.StatusCode} - {content}");
+
+            var rows = JsonSerializer.Deserialize<List<LocationRow>>(content, _jsonOptions);
+
+            return rows?.FirstOrDefault()?.locationid;
+        }
+
+        private async Task<string?> UploadEventImageAsync(IFormFile? image)
+        {
+            if (image == null || image.Length == 0)
+                return null;
+
+            var allowedTypes = new[]
+            {
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+                "image/gif"
+            };
+
+            if (!allowedTypes.Contains(image.ContentType.ToLowerInvariant()))
+                throw new InvalidOperationException("Only JPG, PNG, WEBP, and GIF images are allowed.");
+
+            var extension = Path.GetExtension(image.FileName);
+
+            if (string.IsNullOrWhiteSpace(extension))
+                extension = ".jpg";
+
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var storagePath = $"events/{fileName}";
+
+            using var request = new HttpRequestMessage(
+                HttpMethod.Post,
+                $"{_baseUrl}/storage/v1/object/{_storageBucket}/{storagePath}"
+            );
+
+            request.Headers.Add("apikey", _serviceRoleKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _serviceRoleKey);
+            request.Headers.Add("x-upsert", "true");
+
+            await using var stream = image.OpenReadStream();
+            request.Content = new StreamContent(stream);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue(image.ContentType);
+
+            var response = await _httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new InvalidOperationException($"Supabase image upload failed: {response.StatusCode} - {content}");
+
+            return $"{_baseUrl}/storage/v1/object/public/{_storageBucket}/{storagePath}";
+        }
+
         private async Task<T?> GetAsync<T>(string path)
         {
             var response = await _httpClient.GetAsync(_baseUrl + path);
@@ -298,6 +388,7 @@ namespace DevDynasty.Services
             public string? eventstartdate { get; set; }
             public string? eventenddate { get; set; }
             public Guid? locationid { get; set; }
+            public string? eventimageurl { get; set; }
             public int? requiredvolunteers { get; set; }
             public string? eventstatus { get; set; }
         }

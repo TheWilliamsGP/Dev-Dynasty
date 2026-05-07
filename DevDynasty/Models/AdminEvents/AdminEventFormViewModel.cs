@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace DevDynasty.Models.AdminEvents
 {
@@ -25,12 +26,20 @@ namespace DevDynasty.Models.AdminEvents
         [Display(Name = "Location")]
         public Guid? LocationId { get; set; }
 
+        [Display(Name = "New location address")]
+        public string? NewLocationAddress { get; set; }
+
         [Range(1, 500)]
         [Display(Name = "Required volunteers")]
         public int RequiredVolunteers { get; set; } = 1;
 
         [Display(Name = "Status")]
         public string EventStatus { get; set; } = "active";
+
+        [Display(Name = "Event image")]
+        public IFormFile? EventImage { get; set; }
+
+        public string? ExistingImageUrl { get; set; }
 
         public List<LocationOptionViewModel> Locations { get; set; } = new();
     }

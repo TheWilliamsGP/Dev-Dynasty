@@ -1,0 +1,44 @@
+﻿@model DevDynasty.Models.VolunteerAuth.VolunteerLoginViewModel
+
+@{
+    ViewData["Title"] = "Volunteer Login";
+}
+
+<section class="mx-auto max-w-xl px-4 py-16">
+    <a href="/" class="text-sm text-primary hover:opacity-80">← Back to home</a>
+
+    <div class="mt-6 rounded-xl border bg-card p-6 shadow-sm">
+        <h1 class="font-serif text-4xl font-bold">Volunteer Login</h1>
+        <p class="mt-2 text-muted-foreground">
+            Log in to view your dashboard and volunteer for events.
+        </p>
+
+        <div asp-validation-summary="ModelOnly" class="form-error mt-4"></div>
+
+        <form asp-action="Login" method="post" class="mt-8 space-y-4" novalidate>
+            @Html.AntiForgeryToken()
+
+            <div>
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-input" autocomplete="email" />
+                <span asp-validation-for="Email" class="form-error"></span>
+            </div>
+
+            <div>
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-input" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="form-error"></span>
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+                <button type="submit" class="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
+                    Login
+                </button>
+
+                <a href="/account/register" class="rounded-md border border-input px-6 py-3 text-sm font-semibold">
+                    Create account
+                </a>
+            </div>
+        </form>
+    </div>
+</section>

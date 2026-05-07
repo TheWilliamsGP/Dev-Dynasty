@@ -107,7 +107,7 @@ namespace DevDynasty.Services
         private async Task<List<VolunteerEventCardViewModel>> GetEventsForVolunteerAsync(Guid volunteerId)
         {
             var events = await GetAsync<List<EventRow>>(
-                "/rest/v1/eventactivitytable?select=eventid,eventname,eventtype,eventdescription,eventstartdate,eventenddate,locationid,requiredvolunteers,eventstatus&eventstatus=neq.cancelled&order=eventstartdate.asc"
+                "/rest/v1/eventactivitytable?select=eventid,eventname,eventtype,eventdescription,eventstartdate,eventenddate,locationid,eventimageurl,requiredvolunteers,eventstatus&eventstatus=neq.cancelled&order=eventstartdate.asc"
             ) ?? new List<EventRow>();
 
             var locations = await GetAsync<List<LocationRow>>(

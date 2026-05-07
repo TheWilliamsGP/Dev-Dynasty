@@ -8,12 +8,15 @@
     <a href="/admin/events" class="text-sm text-primary hover:opacity-80">← Back to events</a>
 
     <h1 class="mt-4 font-serif text-4xl font-bold">Edit Event</h1>
-    <p class="mt-2 text-muted-foreground">Update event information, date, location, and required volunteers.</p>
+    <p class="mt-2 text-muted-foreground">Update event information, date, location, image, and required volunteers.</p>
 
-    <form asp-action="Edit" asp-route-id="@Model.EventId" method="post" class="mt-8 rounded-xl border bg-card p-6 shadow-sm">
+    <form asp-action="Edit" asp-route-id="@Model.EventId" method="post" enctype="multipart/form-data" class="mt-8 rounded-xl border bg-card p-6 shadow-sm" novalidate>
         @Html.AntiForgeryToken()
 
+        <div asp-validation-summary="ModelOnly" class="form-error mb-6"></div>
+
         <input type="hidden" asp-for="EventId" />
+        <input type="hidden" asp-for="ExistingImageUrl" />
 
         <partial name="_EventForm" model="Model" />
 

@@ -26,6 +26,11 @@
             foreach (var item in Model.Events)
             {
                 <div class="rounded-xl border bg-card p-6 shadow-sm">
+                    @if (!string.IsNullOrWhiteSpace(item.EventImageUrl))
+                    {
+                        <img src="@item.EventImageUrl" alt="@item.EventName" class="volunteer-event-image" />
+                    }
+
                     <p class="text-sm font-semibold text-primary">@item.EventType</p>
                     <h2 class="mt-2 font-serif text-2xl font-bold">@item.EventName</h2>
 

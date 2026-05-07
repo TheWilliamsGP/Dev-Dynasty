@@ -1,0 +1,75 @@
+﻿@model DevDynasty.Models.VolunteerAuth.VolunteerRegisterViewModel
+
+@{
+    ViewData["Title"] = "Volunteer Register";
+}
+
+<section class="mx-auto max-w-3xl px-4 py-16">
+    <a href="/" class="text-sm text-primary hover:opacity-80">← Back to home</a>
+
+    <div class="mt-6 rounded-xl border bg-card p-6 shadow-sm">
+        <h1 class="font-serif text-4xl font-bold">Volunteer Register</h1>
+        <p class="mt-2 text-muted-foreground">
+            Create your volunteer account to view and join upcoming events.
+        </p>
+
+        <div asp-validation-summary="ModelOnly" class="form-error mt-4"></div>
+
+        <form asp-action="Register" method="post" class="mt-8 space-y-4" novalidate>
+            @Html.AntiForgeryToken()
+
+            <div class="grid gap-4 md:grid-cols-2">
+                <div>
+                    <label asp-for="FirstName" class="form-label"></label>
+                    <input asp-for="FirstName" class="form-input" autocomplete="given-name" />
+                    <span asp-validation-for="FirstName" class="form-error"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Surname" class="form-label"></label>
+                    <input asp-for="Surname" class="form-input" autocomplete="family-name" />
+                    <span asp-validation-for="Surname" class="form-error"></span>
+                </div>
+            </div>
+
+            <div>
+                <label asp-for="PhoneNumber" class="form-label"></label>
+                <input asp-for="PhoneNumber" class="form-input" placeholder="0712345678 or +27712345678" autocomplete="tel" />
+                <span asp-validation-for="PhoneNumber" class="form-error"></span>
+            </div>
+
+            <div>
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-input" autocomplete="email" />
+                <span asp-validation-for="Email" class="form-error"></span>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2">
+                <div>
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-input" autocomplete="new-password" />
+                    <span asp-validation-for="Password" class="form-error"></span>
+                    <p class="mt-2 text-sm text-muted-foreground">
+                        Password must be at least 8 characters and include at least one letter and one number.
+                    </p>
+                </div>
+
+                <div>
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-input" autocomplete="new-password" />
+                    <span asp-validation-for="ConfirmPassword" class="form-error"></span>
+                </div>
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+                <button type="submit" class="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90">
+                    Register
+                </button>
+
+                <a href="/account/login" class="rounded-md border border-input px-6 py-3 text-sm font-semibold">
+                    Already have an account?
+                </a>
+            </div>
+        </form>
+    </div>
+</section>

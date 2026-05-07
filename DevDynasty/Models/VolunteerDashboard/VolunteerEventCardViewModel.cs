@@ -12,6 +12,7 @@
         public int RequiredVolunteers { get; set; }
         public int JoinedVolunteers { get; set; }
         public bool HasJoined { get; set; }
+        public string? EventImageUrl { get; set; }
 
         public string StaffingStatus
         {

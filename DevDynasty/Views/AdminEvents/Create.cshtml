@@ -10,8 +10,10 @@
     <h1 class="mt-4 font-serif text-4xl font-bold">Create Event</h1>
     <p class="mt-2 text-muted-foreground">Add a new event and define how many volunteers are needed.</p>
 
-    <form asp-action="Create" method="post" class="mt-8 rounded-xl border bg-card p-6 shadow-sm">
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="mt-8 rounded-xl border bg-card p-6 shadow-sm" novalidate>
         @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="form-error mb-6"></div>
 
         <partial name="_EventForm" model="Model" />
 

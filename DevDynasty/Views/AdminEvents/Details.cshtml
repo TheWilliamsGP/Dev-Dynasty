@@ -8,6 +8,11 @@
     <a href="/admin/events" class="text-sm text-primary hover:opacity-80">← Back to events</a>
 
     <div class="mt-6 rounded-xl border bg-card p-6 shadow-sm">
+        @if (!string.IsNullOrWhiteSpace(Model.Event.EventImageUrl))
+        {
+            <img src="@Model.Event.EventImageUrl" alt="@Model.Event.EventName" class="event-detail-image" />
+        }
+
         <div class="flex flex-wrap items-start justify-between gap-4">
             <div>
                 <h1 class="font-serif text-4xl font-bold">@Model.Event.EventName</h1>
