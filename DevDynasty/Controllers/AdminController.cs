@@ -32,5 +32,44 @@ namespace DevDynasty.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> Donors()
+        {
+            var donors = await _supabase.GetDonors();
+            return View(donors);
+        }
+
+        public async Task<IActionResult> Donations()
+        {
+            var donations = await _supabase.GetDonations();
+            var donors = await _supabase.GetDonors();
+
+            var model = donations.Select(d => new AdminDonationViewModel
+            {
+                Amount = d.donationamount,
+                Date = d.donationdate,
+                Content = d.donationcontent,
+                IsAnonymous = d.isanonymous,
+                DonorName = donors.FirstOrDefault(x => x.donarid == d.donarid)?.donarname
+            }).ToList();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Payments()
+        {
+            var cards = await _supabase.GetCards();
+            var donors = await _supabase.GetDonors();
+
+            var model = cards.Select(c => new AdminPaymentViewModel
+            {
+                CardType = c.cardtype,
+                CardNumber = c.cardnumber,
+                Expiry = c.cardexpiry,
+                DonorName = donors.FirstOrDefault(d => d.donarid == c.donarid)?.donarname
+            }).ToList();
+
+            return View(model);
+        }
     }
 }

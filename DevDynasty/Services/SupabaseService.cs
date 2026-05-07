@@ -90,5 +90,31 @@ namespace DevDynasty.Services
 
             return await response.Content.ReadFromJsonAsync<List<DonationDto>>();
         }
+
+        //Get Donors
+        public async Task<List<DonorDto>> GetDonors()
+        {
+            var response = await _http.GetAsync("donartable?select=*");
+
+            var error = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"SUPABASE DONOR GET ERROR: {error}");
+
+            return await response.Content.ReadFromJsonAsync<List<DonorDto>>();
+        }
+
+        //Get Cards
+        public async Task<List<CardDto>> GetCards()
+        {
+            var response = await _http.GetAsync("cardtable?select=*");
+
+            var error = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"SUPABASE CARD GET ERROR: {error}");
+
+            return await response.Content.ReadFromJsonAsync<List<CardDto>>();
+        }
     }
 }

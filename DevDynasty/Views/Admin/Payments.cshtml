@@ -1,0 +1,30 @@
+﻿@model List<AdminPaymentViewModel>
+
+<h2 class="text-2xl font-bold mb-6">Payments</h2>
+
+<table class="w-full text-left">
+
+    <thead class="border-b text-gray-500 text-sm">
+        <tr>
+            <th class="py-3">Donor</th>
+            <th>Card</th>
+            <th>Type</th>
+            <th>Expiry</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr class="border-b hover:bg-gray-50">
+                <td class="py-3">@c.DonorName</td>
+                <td class="font-mono">
+                    **** **** **** @c.CardNumber.ToString().Substring(c.CardNumber.ToString().Length - 4)
+                </td>
+                <td>@c.CardType</td>
+                <td>@c.Expiry.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+
+</table>

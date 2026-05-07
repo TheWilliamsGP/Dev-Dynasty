@@ -1,0 +1,37 @@
+﻿@model List<AdminDonationViewModel>
+
+<h2 class="text-2xl font-bold mb-6">Donations</h2>
+
+<table class="w-full text-left">
+
+    <thead class="border-b text-gray-500 text-sm">
+        <tr>
+            <th class="py-3">Donor</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Anonymous</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var d in Model)
+        {
+            <tr class="border-b hover:bg-gray-50">
+                <td class="py-3 font-medium">
+                    @(d.IsAnonymous ? "Anonymous" : d.DonorName)
+                </td>
+                <td>R @d.Amount</td>
+                <td>@d.Content</td>
+                <td>@d.Date.ToShortDateString()</td>
+                <td>
+                    <span class="px-2 py-1 text-sm rounded
+                            @(d.IsAnonymous ? "bg-gray-200" : "bg-green-100")">
+                        @(d.IsAnonymous ? "Yes" : "No")
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
