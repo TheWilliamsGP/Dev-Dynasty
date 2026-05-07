@@ -4,13 +4,13 @@
     {
         public bool IsMonetary { get; set; }
 
-        // Monetary
+
         public int? DonationAmount { get; set; }
 
-        // Non-monetary
+
         public string DonationContent { get; set; }
 
-        // Shared
+
         public bool IsAnonymous { get; set; }
     }
 
