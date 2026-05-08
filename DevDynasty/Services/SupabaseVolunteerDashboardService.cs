@@ -104,6 +104,15 @@ namespace DevDynasty.Services
             await SendAsync(HttpMethod.Post, "/rest/v1/eventvolunteervotetable", createPayload);
         }
 
+        public async Task UnvolunteerFromEventAsync(Guid volunteerId, Guid eventId)
+        {
+            await SendAsync(
+                HttpMethod.Delete,
+                $"/rest/v1/eventvolunteervotetable?eventid=eq.{eventId}&volunteerid=eq.{volunteerId}",
+                null
+            );
+        }
+
         private async Task<List<VolunteerEventCardViewModel>> GetEventsForVolunteerAsync(Guid volunteerId)
         {
             var events = await GetAsync<List<EventRow>>(
@@ -142,6 +151,7 @@ namespace DevDynasty.Services
                     EventStartDate = e.eventstartdate,
                     EventEndDate = e.eventenddate,
                     LocationAddress = location?.locationaddress,
+                    EventImageUrl = e.eventimageurl,
                     RequiredVolunteers = e.requiredvolunteers ?? 1,
                     JoinedVolunteers = joinedCounts.TryGetValue(e.eventid, out var count) ? count : 0,
                     HasJoined = volunteerJoinedEventIds.Contains(e.eventid)
@@ -204,6 +214,7 @@ namespace DevDynasty.Services
             public string? eventstartdate { get; set; }
             public string? eventenddate { get; set; }
             public Guid? locationid { get; set; }
+            public string? eventimageurl { get; set; }
             public int? requiredvolunteers { get; set; }
             public string? eventstatus { get; set; }
         }

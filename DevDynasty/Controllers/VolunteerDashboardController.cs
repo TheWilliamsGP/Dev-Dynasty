@@ -118,6 +118,30 @@ namespace DevDynasty.Controllers
             });
         }
 
+        [HttpPost("events/unvolunteer")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnvolunteerEvent(Guid volunteerId, Guid eventId)
+        {
+            if (!IsCurrentVolunteer(volunteerId))
+                return RedirectToAction("Login", "Account");
+
+            try
+            {
+                await _dashboardService.UnvolunteerFromEventAsync(volunteerId, eventId);
+                TempData["SuccessMessage"] = "You have removed yourself from this event.";
+            }
+            catch
+            {
+                TempData["ErrorMessage"] = "Something went wrong while removing you from this event. Please try again.";
+            }
+
+            return RedirectToAction(nameof(EventDetails), new
+            {
+                volunteerId,
+                eventId
+            });
+        }
+
         private bool IsCurrentVolunteer(Guid volunteerId)
         {
             var sessionVolunteerId = HttpContext.Session.GetString("VolunteerId");

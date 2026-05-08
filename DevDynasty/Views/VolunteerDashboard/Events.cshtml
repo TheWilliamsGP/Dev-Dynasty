@@ -40,7 +40,12 @@
 
                     <div class="mt-4 text-sm text-muted-foreground">
                         <p><strong>Start date:</strong> @item.EventStartDate</p>
-                        <p><strong>End date:</strong> @item.EventEndDate</p>
+
+                        @if (!string.IsNullOrWhiteSpace(item.EventEndDate))
+                        {
+                            <p><strong>End date:</strong> @item.EventEndDate</p>
+                        }
+
                         <p><strong>Location:</strong> @item.LocationAddress</p>
                         <p><strong>Volunteers:</strong> @item.JoinedVolunteers / @item.RequiredVolunteers</p>
                         <p><strong>Status:</strong> @item.StaffingStatus</p>
@@ -56,6 +61,16 @@
                             <span class="rounded-md bg-muted px-4 py-2 text-sm font-semibold text-muted-foreground">
                                 Already Volunteered
                             </span>
+
+                            <form asp-action="UnvolunteerEvent" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="volunteerId" value="@Model.VolunteerId" />
+                                <input type="hidden" name="eventId" value="@item.EventId" />
+
+                                <button type="submit" class="rounded-md border border-input px-4 py-2 text-sm font-semibold text-destructive">
+                                    Unvolunteer
+                                </button>
+                            </form>
                         }
                         else if (item.CanVolunteer)
                         {

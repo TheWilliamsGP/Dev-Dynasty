@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text.Json;
+﻿using System.Net.Http.Json;
 using DevDynasty.Models;
 
 namespace DevDynasty.Services
@@ -13,10 +12,10 @@ namespace DevDynasty.Services
             _http = http;
         }
 
-        //Creates Donor
-        public async Task<DonorDto> CreateDonor(object donor)
+        // Creates Donor
+        public async Task<DonorDto?> CreateDonor(object donor)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "donartable")
+            var request = new HttpRequestMessage(HttpMethod.Post, "/rest/v1/donartable")
             {
                 Content = JsonContent.Create(donor)
             };
@@ -24,7 +23,6 @@ namespace DevDynasty.Services
             request.Headers.Add("Prefer", "return=representation");
 
             var response = await _http.SendAsync(request);
-
             var error = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -36,10 +34,10 @@ namespace DevDynasty.Services
             return result?.FirstOrDefault();
         }
 
-        //Creates Donation
+        // Creates Donation
         public async Task CreateDonation(DonationDto donation)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "donationtable")
+            var request = new HttpRequestMessage(HttpMethod.Post, "/rest/v1/donationtable")
             {
                 Content = JsonContent.Create(donation)
             };
@@ -47,7 +45,6 @@ namespace DevDynasty.Services
             request.Headers.Add("Prefer", "return=representation");
 
             var response = await _http.SendAsync(request);
-
             var error = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -56,10 +53,10 @@ namespace DevDynasty.Services
             }
         }
 
-        //Payment
+        // Creates Card
         public async Task CreateCard(CardDto card)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "cardtable")
+            var request = new HttpRequestMessage(HttpMethod.Post, "/rest/v1/cardtable")
             {
                 Content = JsonContent.Create(card)
             };
@@ -67,7 +64,6 @@ namespace DevDynasty.Services
             request.Headers.Add("Prefer", "return=representation");
 
             var response = await _http.SendAsync(request);
-
             var error = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -76,10 +72,10 @@ namespace DevDynasty.Services
             }
         }
 
-        
+        // Get Donations
         public async Task<List<DonationDto>> GetDonations()
         {
-            var response = await _http.GetAsync("donationtable?select=*");
+            var response = await _http.GetAsync("/rest/v1/donationtable?select=*");
 
             var error = await response.Content.ReadAsStringAsync();
 
@@ -88,33 +84,43 @@ namespace DevDynasty.Services
                 throw new Exception($"SUPABASE GET ERROR: {error}");
             }
 
-            return await response.Content.ReadFromJsonAsync<List<DonationDto>>();
+            var result = await response.Content.ReadFromJsonAsync<List<DonationDto>>();
+
+            return result ?? new List<DonationDto>();
         }
 
-        //Get Donors
+        // Get Donors
         public async Task<List<DonorDto>> GetDonors()
         {
-            var response = await _http.GetAsync("donartable?select=*");
+            var response = await _http.GetAsync("/rest/v1/donartable?select=*");
 
             var error = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
+            {
                 throw new Exception($"SUPABASE DONOR GET ERROR: {error}");
+            }
 
-            return await response.Content.ReadFromJsonAsync<List<DonorDto>>();
+            var result = await response.Content.ReadFromJsonAsync<List<DonorDto>>();
+
+            return result ?? new List<DonorDto>();
         }
 
-        //Get Cards
+        // Get Cards
         public async Task<List<CardDto>> GetCards()
         {
-            var response = await _http.GetAsync("cardtable?select=*");
+            var response = await _http.GetAsync("/rest/v1/cardtable?select=*");
 
             var error = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
+            {
                 throw new Exception($"SUPABASE CARD GET ERROR: {error}");
+            }
 
-            return await response.Content.ReadFromJsonAsync<List<CardDto>>();
+            var result = await response.Content.ReadFromJsonAsync<List<CardDto>>();
+
+            return result ?? new List<CardDto>();
         }
     }
 }

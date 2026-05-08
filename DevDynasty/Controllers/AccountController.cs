@@ -39,28 +39,36 @@ namespace DevDynasty.Controllers
             {
                 var result = await _authService.RegisterVolunteerAsync(model);
 
-                if (!result.IsSuccess || !result.VolunteerId.HasValue)
+                if (!result.IsSuccess || !result.UserId.HasValue)
                 {
                     ModelState.AddModelError("", result.ErrorMessage ?? "Registration failed. Please try again.");
                     TempData["ErrorMessage"] = result.ErrorMessage ?? "Registration failed. Please try again.";
                     return View(model);
                 }
 
-                SaveVolunteerSession(result.VolunteerId.Value, result.AccessToken);
+                SaveUserSession(result);
 
                 TempData["SuccessMessage"] = "Registration successful. Welcome!";
-                return RedirectToAction("Dashboard", "VolunteerDashboard", new { volunteerId = result.VolunteerId.Value });
+
+                return RedirectToAction("Dashboard", "VolunteerDashboard", new
+                {
+                    volunteerId = result.UserId.Value
+                });
             }
             catch (InvalidOperationException ex)
             {
-                ModelState.AddModelError("", FriendlyAuthError(ex.Message));
-                TempData["ErrorMessage"] = FriendlyAuthError(ex.Message);
+                var message = FriendlyAuthError(ex.Message);
+
+                ModelState.AddModelError("", message);
+                TempData["ErrorMessage"] = message;
+
                 return View(model);
             }
             catch
             {
                 ModelState.AddModelError("", "Something went wrong while creating your account. Please try again.");
                 TempData["ErrorMessage"] = "Something went wrong while creating your account. Please try again.";
+
                 return View(model);
             }
         }
@@ -90,28 +98,41 @@ namespace DevDynasty.Controllers
             {
                 var result = await _authService.LoginVolunteerAsync(model);
 
-                if (!result.IsSuccess || !result.VolunteerId.HasValue)
+                if (!result.IsSuccess || !result.UserId.HasValue)
                 {
                     ModelState.AddModelError("", result.ErrorMessage ?? "Invalid email or password.");
                     TempData["ErrorMessage"] = result.ErrorMessage ?? "Invalid email or password.";
                     return View(model);
                 }
 
-                SaveVolunteerSession(result.VolunteerId.Value, result.AccessToken);
+                SaveUserSession(result);
 
                 TempData["SuccessMessage"] = "Login successful.";
-                return RedirectToAction("Dashboard", "VolunteerDashboard", new { volunteerId = result.VolunteerId.Value });
+
+                if (result.IsAdmin)
+                {
+                    return RedirectToAction("Dashboard", "Admin");
+                }
+
+                return RedirectToAction("Dashboard", "VolunteerDashboard", new
+                {
+                    volunteerId = result.UserId.Value
+                });
             }
             catch (InvalidOperationException ex)
             {
-                ModelState.AddModelError("", FriendlyAuthError(ex.Message));
-                TempData["ErrorMessage"] = FriendlyAuthError(ex.Message);
+                var message = FriendlyAuthError(ex.Message);
+
+                ModelState.AddModelError("", message);
+                TempData["ErrorMessage"] = message;
+
                 return View(model);
             }
             catch
             {
                 ModelState.AddModelError("", "Something went wrong while logging in. Please try again.");
                 TempData["ErrorMessage"] = "Something went wrong while logging in. Please try again.";
+
                 return View(model);
             }
         }
@@ -122,17 +143,24 @@ namespace DevDynasty.Controllers
             HttpContext.Session.Clear();
 
             Response.Cookies.Delete("VolunteerId");
+            Response.Cookies.Delete("AdminId");
+            Response.Cookies.Delete("UserRole");
+            Response.Cookies.Delete("AccessToken");
             Response.Cookies.Delete("VolunteerAccessToken");
 
             TempData["SuccessMessage"] = "You have been logged out.";
+
             return RedirectToAction("Index", "Home");
         }
 
-        private void SaveVolunteerSession(Guid volunteerId, string? accessToken)
+        private void SaveUserSession(SupabaseVolunteerAuthService.AuthResult result)
         {
-            HttpContext.Session.SetString("VolunteerId", volunteerId.ToString());
+            if (!result.UserId.HasValue)
+                return;
 
-            Response.Cookies.Append("VolunteerId", volunteerId.ToString(), new CookieOptions
+            HttpContext.Session.SetString("UserRole", result.IsAdmin ? "Admin" : "Volunteer");
+
+            Response.Cookies.Append("UserRole", result.IsAdmin ? "Admin" : "Volunteer", new CookieOptions
             {
                 HttpOnly = true,
                 Secure = Request.IsHttps,
@@ -140,9 +168,34 @@ namespace DevDynasty.Controllers
                 Expires = DateTimeOffset.UtcNow.AddHours(8)
             });
 
-            if (!string.IsNullOrWhiteSpace(accessToken))
+            if (result.IsAdmin)
             {
-                Response.Cookies.Append("VolunteerAccessToken", accessToken, new CookieOptions
+                HttpContext.Session.SetString("AdminId", result.UserId.Value.ToString());
+
+                Response.Cookies.Append("AdminId", result.UserId.Value.ToString(), new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = Request.IsHttps,
+                    SameSite = SameSiteMode.Lax,
+                    Expires = DateTimeOffset.UtcNow.AddHours(8)
+                });
+            }
+            else
+            {
+                HttpContext.Session.SetString("VolunteerId", result.UserId.Value.ToString());
+
+                Response.Cookies.Append("VolunteerId", result.UserId.Value.ToString(), new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = Request.IsHttps,
+                    SameSite = SameSiteMode.Lax,
+                    Expires = DateTimeOffset.UtcNow.AddHours(8)
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(result.AccessToken))
+            {
+                Response.Cookies.Append("AccessToken", result.AccessToken, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = Request.IsHttps,
@@ -165,6 +218,14 @@ namespace DevDynasty.Controllers
         private static string FriendlyAuthError(string error)
         {
             var lower = error.ToLowerInvariant();
+
+            if (lower.Contains("over_email_send_rate_limit") ||
+                lower.Contains("email rate limit exceeded") ||
+                lower.Contains("too many requests") ||
+                lower.Contains("429"))
+            {
+                return "Too many signup attempts were made. Please wait a while before trying again.";
+            }
 
             if (lower.Contains("already registered") ||
                 lower.Contains("already exists") ||
@@ -192,6 +253,16 @@ namespace DevDynasty.Controllers
                 return "Please enter a valid email address.";
             }
 
+            if (lower.Contains("admin lookup failed"))
+            {
+                return "The app could not check admin access. Please check the admin table setup.";
+            }
+
+            if (lower.Contains("volunteer lookup failed"))
+            {
+                return "The app could not check volunteer access. Please check the volunteer table setup.";
+            }
+
             if (lower.Contains("volunteer profile failed") ||
                 lower.Contains("volunteertable") ||
                 lower.Contains("volunteerpno") ||
@@ -202,7 +273,7 @@ namespace DevDynasty.Controllers
 
             if (lower.Contains("unauthorized") || lower.Contains("401"))
             {
-                return "The app could not connect to Supabase correctly. Please check the Supabase keys.";
+                return "The app could not connect to Supabase correctly. Please check the Supabase service role key.";
             }
 
             if (lower.Contains("network") || lower.Contains("timeout"))

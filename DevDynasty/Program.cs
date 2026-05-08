@@ -9,15 +9,15 @@ builder.Services.AddHttpClient<SupabaseService>((serviceProvider, client) =>
     var config = serviceProvider.GetRequiredService<IConfiguration>();
 
     var baseUrl = config["Supabase:Url"];
-    var apiKey = config["Supabase:ApiKey"];
+    var apiKey = config["Supabase:ApiKey"] ?? config["Supabase:AnonKey"];
 
     if (string.IsNullOrWhiteSpace(baseUrl))
         throw new InvalidOperationException("Supabase:Url is missing.");
 
     if (string.IsNullOrWhiteSpace(apiKey))
-        throw new InvalidOperationException("Supabase:ApiKey is missing.");
+        throw new InvalidOperationException("Supabase:ApiKey or Supabase:AnonKey is missing.");
 
-    client.BaseAddress = new Uri(baseUrl);
+    client.BaseAddress = new Uri(baseUrl.TrimEnd('/'));
     client.DefaultRequestHeaders.Add("apikey", apiKey);
     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 });

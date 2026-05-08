@@ -43,49 +43,82 @@ namespace DevDynasty.Services
                 return AuthResult.Failed("A volunteer profile already exists for this email. Please log in instead.");
             }
 
-            var authUser = await SignUpWithSupabaseAuthAsync(normalizedEmail, model.Password);
+            var authUser = await CreateSupabaseAuthUserAsAdminAsync(
+                normalizedEmail,
+                model.Password
+            );
 
-            if (authUser?.user?.id == null)
+            if (authUser?.id == null)
             {
                 return AuthResult.Failed("Could not create Supabase Auth user.");
             }
 
-            var volunteerId = authUser.user.id.Value;
+            var volunteerId = authUser.id.Value;
 
             await CreateVolunteerProfileAsync(volunteerId, model);
 
-            return AuthResult.Success(volunteerId, authUser.access_token);
+            var login = await SignInWithSupabaseAuthAsync(normalizedEmail, model.Password);
+
+            return AuthResult.Success(
+                userId: volunteerId,
+                accessToken: login?.access_token,
+                role: UserRole.Volunteer
+            );
         }
 
         public async Task<AuthResult> LoginVolunteerAsync(VolunteerLoginViewModel model)
         {
-            var login = await SignInWithSupabaseAuthAsync(model.Email, model.Password);
+            var normalizedEmail = model.Email.Trim().ToLowerInvariant();
+
+            var login = await SignInWithSupabaseAuthAsync(normalizedEmail, model.Password);
 
             if (login?.user?.id == null)
             {
                 return AuthResult.Failed("Invalid email or password.");
             }
 
-            var volunteer = await GetVolunteerByEmailAsync(model.Email);
+            var admin = await GetAdminByEmailAsync(normalizedEmail);
+
+            if (admin != null)
+            {
+                return AuthResult.Success(
+                    userId: admin.adminid,
+                    accessToken: login.access_token,
+                    role: UserRole.Admin
+                );
+            }
+
+            var volunteer = await GetVolunteerByEmailAsync(normalizedEmail);
 
             if (volunteer == null)
             {
-                return AuthResult.Failed("Login worked, but no volunteer profile was found for this email.");
+                return AuthResult.Failed("Login worked, but no volunteer or admin profile was found for this email.");
             }
 
-            return AuthResult.Success(volunteer.volunteerid, login.access_token);
+            return AuthResult.Success(
+                userId: volunteer.volunteerid,
+                accessToken: login.access_token,
+                role: UserRole.Volunteer
+            );
         }
 
-        private async Task<SupabaseAuthResponse?> SignUpWithSupabaseAuthAsync(string email, string password)
+        private async Task<SupabaseAdminUserResponse?> CreateSupabaseAuthUserAsAdminAsync(string email, string password)
         {
             var payload = new
             {
                 email,
-                password
+                password,
+                email_confirm = true,
+                user_metadata = new
+                {
+                    role = "volunteer"
+                }
             };
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/auth/v1/signup");
-            request.Headers.Add("apikey", _anonKey);
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/auth/v1/admin/users");
+
+            request.Headers.Add("apikey", _serviceRoleKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _serviceRoleKey);
 
             var json = JsonSerializer.Serialize(payload);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -94,9 +127,13 @@ namespace DevDynasty.Services
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                throw new InvalidOperationException($"Supabase signup failed: {response.StatusCode} - {content}");
+            {
+                throw new InvalidOperationException(
+                    $"Supabase admin user creation failed. Status: {response.StatusCode}. Response: {content}"
+                );
+            }
 
-            return JsonSerializer.Deserialize<SupabaseAuthResponse>(content, _jsonOptions);
+            return JsonSerializer.Deserialize<SupabaseAdminUserResponse>(content, _jsonOptions);
         }
 
         private async Task<SupabaseAuthResponse?> SignInWithSupabaseAuthAsync(string email, string password)
@@ -107,8 +144,13 @@ namespace DevDynasty.Services
                 password
             };
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/auth/v1/token?grant_type=password");
+            using var request = new HttpRequestMessage(
+                HttpMethod.Post,
+                $"{_baseUrl}/auth/v1/token?grant_type=password"
+            );
+
             request.Headers.Add("apikey", _anonKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _anonKey);
 
             var json = JsonSerializer.Serialize(payload);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -117,7 +159,11 @@ namespace DevDynasty.Services
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                return null;
+            {
+                throw new InvalidOperationException(
+                    $"Supabase login failed. Status: {response.StatusCode}. Response: {content}"
+                );
+            }
 
             return JsonSerializer.Deserialize<SupabaseAuthResponse>(content, _jsonOptions);
         }
@@ -137,7 +183,7 @@ namespace DevDynasty.Services
             using var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/rest/v1/volunteertable");
 
             request.Headers.Add("apikey", _serviceRoleKey);
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _serviceRoleKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _serviceRoleKey);
             request.Headers.Add("Prefer", "return=minimal");
 
             var json = JsonSerializer.Serialize(payload);
@@ -150,7 +196,7 @@ namespace DevDynasty.Services
             {
                 throw new InvalidOperationException(
                     $"Supabase Auth user was created, but creating the volunteer profile failed. " +
-                    $"Status: {response.StatusCode}. Supabase response: {content}"
+                    $"Status: {response.StatusCode}. Response: {content}"
                 );
             }
         }
@@ -159,7 +205,7 @@ namespace DevDynasty.Services
         {
             using var request = new HttpRequestMessage(
                 HttpMethod.Get,
-                $"{_baseUrl}/rest/v1/volunteertable?select=volunteerid,volunteerfname,volunteersname,volunteeremail&volunteeremail=eq.{Uri.EscapeDataString(email)}"
+                $"{_baseUrl}/rest/v1/volunteertable?select=volunteerid,volunteerfname,volunteersname,volunteeremail&volunteeremail=eq.{Uri.EscapeDataString(email.Trim().ToLowerInvariant())}"
             );
 
             request.Headers.Add("apikey", _serviceRoleKey);
@@ -169,27 +215,69 @@ namespace DevDynasty.Services
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                throw new InvalidOperationException($"Volunteer lookup failed: {response.StatusCode} - {content}");
+            {
+                throw new InvalidOperationException(
+                    $"Volunteer lookup failed. Status: {response.StatusCode}. Response: {content}"
+                );
+            }
 
             var rows = JsonSerializer.Deserialize<List<VolunteerRow>>(content, _jsonOptions);
 
             return rows?.FirstOrDefault();
         }
 
+        private async Task<AdminRow?> GetAdminByEmailAsync(string email)
+        {
+            using var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                $"{_baseUrl}/rest/v1/admintable?select=adminid,adminfname,adminsname,adminemail,isactive&adminemail=eq.{Uri.EscapeDataString(email.Trim().ToLowerInvariant())}&isactive=eq.true"
+            );
+
+            request.Headers.Add("apikey", _serviceRoleKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _serviceRoleKey);
+
+            var response = await _httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new InvalidOperationException(
+                    $"Admin lookup failed. Status: {response.StatusCode}. Response: {content}"
+                );
+            }
+
+            var rows = JsonSerializer.Deserialize<List<AdminRow>>(content, _jsonOptions);
+
+            return rows?.FirstOrDefault();
+        }
+
+        public enum UserRole
+        {
+            Volunteer,
+            Admin
+        }
+
         public class AuthResult
         {
             public bool IsSuccess { get; set; }
-            public Guid? VolunteerId { get; set; }
+            public Guid? UserId { get; set; }
+            public Guid? VolunteerId => Role == UserRole.Volunteer ? UserId : null;
+            public Guid? AdminId => Role == UserRole.Admin ? UserId : null;
             public string? AccessToken { get; set; }
             public string? ErrorMessage { get; set; }
+            public UserRole Role { get; set; }
 
-            public static AuthResult Success(Guid volunteerId, string? accessToken)
+            public bool IsAdmin => Role == UserRole.Admin;
+            public bool IsVolunteer => Role == UserRole.Volunteer;
+
+            public static AuthResult Success(Guid userId, string? accessToken, UserRole role)
             {
                 return new AuthResult
                 {
                     IsSuccess = true,
-                    VolunteerId = volunteerId,
-                    AccessToken = accessToken
+                    UserId = userId,
+                    AccessToken = accessToken,
+                    Role = role
                 };
             }
 
@@ -201,6 +289,12 @@ namespace DevDynasty.Services
                     ErrorMessage = message
                 };
             }
+        }
+
+        private class SupabaseAdminUserResponse
+        {
+            public Guid? id { get; set; }
+            public string? email { get; set; }
         }
 
         private class SupabaseAuthResponse
@@ -221,6 +315,15 @@ namespace DevDynasty.Services
             public string volunteerfname { get; set; } = string.Empty;
             public string volunteersname { get; set; } = string.Empty;
             public string? volunteeremail { get; set; }
+        }
+
+        private class AdminRow
+        {
+            public Guid adminid { get; set; }
+            public string adminfname { get; set; } = string.Empty;
+            public string adminsname { get; set; } = string.Empty;
+            public string adminemail { get; set; } = string.Empty;
+            public bool isactive { get; set; }
         }
     }
 }
