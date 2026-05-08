@@ -17,7 +17,7 @@ builder.Services.AddHttpClient<SupabaseService>((serviceProvider, client) =>
     if (string.IsNullOrWhiteSpace(apiKey))
         throw new InvalidOperationException("Supabase:ApiKey is missing.");
 
-    client.BaseAddress = new Uri(baseUrl);
+    client.BaseAddress = new Uri($"{baseUrl}/rest/v1/");
     client.DefaultRequestHeaders.Add("apikey", apiKey);
     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 });
