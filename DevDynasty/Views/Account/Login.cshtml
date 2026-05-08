@@ -1,16 +1,17 @@
 ﻿@model DevDynasty.Models.VolunteerAuth.VolunteerLoginViewModel
 
 @{
-    ViewData["Title"] = "Volunteer Login";
+    ViewData["Title"] = "Login";
 }
 
 <section class="mx-auto max-w-xl px-4 py-16">
     <a href="/" class="text-sm text-primary hover:opacity-80">← Back to home</a>
 
     <div class="mt-6 rounded-xl border bg-card p-6 shadow-sm">
-        <h1 class="font-serif text-4xl font-bold">Volunteer Login</h1>
+        <h1 class="font-serif text-4xl font-bold">Login</h1>
+
         <p class="mt-2 text-muted-foreground">
-            Log in to view your dashboard and volunteer for events.
+            Log in to access your dashboard.
         </p>
 
         <div asp-validation-summary="ModelOnly" class="form-error mt-4"></div>
@@ -28,6 +29,12 @@
                 <label asp-for="Password" class="form-label"></label>
                 <input asp-for="Password" class="form-input" autocomplete="current-password" />
                 <span asp-validation-for="Password" class="form-error"></span>
+
+                <div class="mt-2">
+                    <a href="/account/forgot-password" class="text-sm font-semibold text-primary hover:opacity-80">
+                        Forgot your password?
+                    </a>
+                </div>
             </div>
 
             <div class="mt-8 flex flex-wrap gap-3">

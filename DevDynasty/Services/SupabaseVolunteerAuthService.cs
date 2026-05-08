@@ -102,6 +102,60 @@ namespace DevDynasty.Services
             );
         }
 
+        public async Task SendPasswordResetEmailAsync(string email, string redirectTo)
+        {
+            var payload = new
+            {
+                email = email.Trim().ToLowerInvariant()
+            };
+
+            var url = $"{_baseUrl}/auth/v1/recover?redirect_to={Uri.EscapeDataString(redirectTo)}";
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
+
+            request.Headers.Add("apikey", _anonKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _anonKey);
+
+            var json = JsonSerializer.Serialize(payload);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new InvalidOperationException(
+                    $"Supabase password reset failed. Status: {response.StatusCode}. Response: {content}"
+                );
+            }
+        }
+
+        public async Task UpdatePasswordWithRecoveryTokenAsync(string accessToken, string newPassword)
+        {
+            var payload = new
+            {
+                password = newPassword
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/auth/v1/user");
+
+            request.Headers.Add("apikey", _anonKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var json = JsonSerializer.Serialize(payload);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new InvalidOperationException(
+                    $"Supabase password update failed. Status: {response.StatusCode}. Response: {content}"
+                );
+            }
+        }
+
         private async Task<SupabaseAdminUserResponse?> CreateSupabaseAuthUserAsAdminAsync(string email, string password)
         {
             var payload = new

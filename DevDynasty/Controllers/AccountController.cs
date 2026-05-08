@@ -76,7 +76,7 @@ namespace DevDynasty.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {
-            ViewData["Title"] = "Volunteer Login";
+            ViewData["Title"] = "Login";
             return View(new VolunteerLoginViewModel());
         }
 
@@ -84,7 +84,7 @@ namespace DevDynasty.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(VolunteerLoginViewModel model)
         {
-            ViewData["Title"] = "Volunteer Login";
+            ViewData["Title"] = "Login";
 
             model.Email = model.Email?.Trim().ToLowerInvariant() ?? string.Empty;
 
@@ -132,6 +132,98 @@ namespace DevDynasty.Controllers
             {
                 ModelState.AddModelError("", "Something went wrong while logging in. Please try again.");
                 TempData["ErrorMessage"] = "Something went wrong while logging in. Please try again.";
+
+                return View(model);
+            }
+        }
+
+        [HttpGet("forgot-password")]
+        public IActionResult ForgotPassword()
+        {
+            ViewData["Title"] = "Forgot Password";
+            return View(new ForgotPasswordViewModel());
+        }
+
+        [HttpPost("forgot-password")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            ViewData["Title"] = "Forgot Password";
+
+            model.Email = model.Email?.Trim().ToLowerInvariant() ?? string.Empty;
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Please enter a valid email address.";
+                return View(model);
+            }
+
+            try
+            {
+                var redirectTo = $"{Request.Scheme}://{Request.Host}/account/reset-password";
+
+                await _authService.SendPasswordResetEmailAsync(model.Email, redirectTo);
+
+                TempData["SuccessMessage"] = "If an account exists with that email, a password reset link has been sent.";
+                return RedirectToAction(nameof(Login));
+            }
+            catch (InvalidOperationException ex)
+            {
+                var message = FriendlyAuthError(ex.Message);
+
+                ModelState.AddModelError("", message);
+                TempData["ErrorMessage"] = message;
+
+                return View(model);
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Something went wrong while sending the reset email. Please try again.");
+                TempData["ErrorMessage"] = "Something went wrong while sending the reset email. Please try again.";
+
+                return View(model);
+            }
+        }
+
+        [HttpGet("reset-password")]
+        public IActionResult ResetPassword()
+        {
+            ViewData["Title"] = "Reset Password";
+            return View(new ResetPasswordViewModel());
+        }
+
+        [HttpPost("reset-password")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            ViewData["Title"] = "Reset Password";
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Please fix the highlighted fields and try again.";
+                return View(model);
+            }
+
+            try
+            {
+                await _authService.UpdatePasswordWithRecoveryTokenAsync(model.AccessToken, model.NewPassword);
+
+                TempData["SuccessMessage"] = "Your password has been updated. Please log in.";
+                return RedirectToAction(nameof(Login));
+            }
+            catch (InvalidOperationException ex)
+            {
+                var message = FriendlyAuthError(ex.Message);
+
+                ModelState.AddModelError("", message);
+                TempData["ErrorMessage"] = message;
+
+                return View(model);
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Something went wrong while updating your password. Please request a new reset link and try again.");
+                TempData["ErrorMessage"] = "Something went wrong while updating your password. Please request a new reset link and try again.";
 
                 return View(model);
             }
@@ -218,6 +310,19 @@ namespace DevDynasty.Controllers
         private static string FriendlyAuthError(string error)
         {
             var lower = error.ToLowerInvariant();
+
+            if (lower.Contains("password reset") ||
+                lower.Contains("recover"))
+            {
+                return "Password reset could not be started. Please check the email address and try again.";
+            }
+
+            if (lower.Contains("password update") ||
+                lower.Contains("invalid token") ||
+                lower.Contains("jwt"))
+            {
+                return "Your reset link is invalid or has expired. Please request a new password reset link.";
+            }
 
             if (lower.Contains("over_email_send_rate_limit") ||
                 lower.Contains("email rate limit exceeded") ||
